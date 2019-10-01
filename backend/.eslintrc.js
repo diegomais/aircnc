@@ -20,5 +20,7 @@ module.exports = {
     'class-methods-use-this': 'off',
     // Allow unused variable for next (Express middlewares needs)
     'no-unused-vars': ['error', { argsIgnorePattern: 'next' }],
+    // Don't require CamelCase
+    camelcase: 'off',
   },
 };
