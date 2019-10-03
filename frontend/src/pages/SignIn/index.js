@@ -42,5 +42,7 @@ export default function SignIn({ history }) {
 }
 
 SignIn.propTypes = {
-  history: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
