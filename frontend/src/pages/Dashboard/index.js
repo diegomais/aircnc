@@ -31,6 +31,17 @@ export default function Dashboard() {
     loadSpots();
   }, [user_id]);
 
+  async function handleAccept(id) {
+    await api.post(`/bookings/${id}/approvals`, { headers: { user_id } });
+
+    setRequests(requests.filter(request => request._id !== id));
+  }
+  async function handleReject(id) {
+    await api.post(`/bookings/${id}/rejections`, { headers: { user_id } });
+
+    setRequests(requests.filter(request => request._id !== id));
+  }
+
   return (
     <>
       <ul className="notifications">
@@ -41,10 +52,18 @@ export default function Dashboard() {
               at <strong>{request.spot.company}</strong> to&nbsp;
               <strong>{request.date}</strong>.
             </p>
-            <button type="button" className="accept">
+            <button
+              type="button"
+              className="accept"
+              onClick={() => handleAccept(request._id)}
+            >
               Accept
             </button>
-            <button type="button" className="reject">
+            <button
+              type="button"
+              className="reject"
+              onClick={() => handleReject(request._id)}
+            >
               Reject
             </button>
           </li>
@@ -55,7 +74,7 @@ export default function Dashboard() {
           <li key={spot._id}>
             <header style={{ backgroundImage: `url(${spot.thumbnail_url})` }} />
             <strong>{spot.company}</strong>
-            <span>{spot.price ? `R$${spot.price}/dia` : 'Gratuito'}</span>
+            <span>{spot.price ? `$${spot.price} per day` : 'Free'}</span>
           </li>
         ))}
       </ul>
