@@ -32,12 +32,14 @@ export default function Dashboard() {
   }, [user_id]);
 
   async function handleAccept(id) {
-    await api.post(`/bookings/${id}/approvals`, { headers: { user_id } });
+    await api.post(`/bookings/${id}/approvals`, null, { headers: { user_id } });
 
     setRequests(requests.filter(request => request._id !== id));
   }
   async function handleReject(id) {
-    await api.post(`/bookings/${id}/rejections`, { headers: { user_id } });
+    await api.post(`/bookings/${id}/rejections`, null, {
+      headers: { user_id },
+    });
 
     setRequests(requests.filter(request => request._id !== id));
   }

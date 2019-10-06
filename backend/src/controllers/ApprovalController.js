@@ -10,28 +10,34 @@ module.exports = {
     }
 
     const { user_id } = req.headers;
-    if (!booking_id) {
+    if (!user_id) {
       return res
         .status(400)
         .json({ error: 'User ID is necessary in request headers.' });
     }
 
-    const booking = await Booking.findById(booking_id);
+    const booking = await Booking.findById(booking_id).populate('spot');
     if (!booking) {
       return res
         .status(400)
         .json({ error: 'Reservation request does not exists.' });
     }
 
-    if (booking.spot.user !== user_id) {
+    if (String(booking.spot.user) !== String(user_id)) {
       return res
         .status(400)
-        .json({ error: 'Access denied to reject this request.' });
+        .json({ error: 'Access denied to accept this request.' });
     }
 
     booking.approved = true;
 
     await booking.save();
+
+    const bookingUserSocket = req.connectedUsers[booking.user];
+
+    if (bookingUserSocket) {
+      req.io.to(bookingUserSocket).emit('booking_response', booking);
+    }
 
     return res.json(booking);
   },
