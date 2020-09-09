@@ -2,24 +2,26 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-
 const socketio = require('socket.io');
 const http = require('http');
-
 const routes = require('./routes');
-
+const PORT = process.env.PORT || 3333;
 const app = express();
 const server = http.Server(app);
 const io = socketio(server);
 
-mongoose.connect(
-  'mongodb+srv://aircnc:Ewky4oDdrrWp2mVC@aircnc-d8eag.mongodb.net/aircnc?retryWrites=true&w=majority',
-  { useNewUrlParser: true, useUnifiedTopology: true }
-);
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 const connectedUsers = {};
 
-io.on('connection', socket => {
+io.on('connection', (socket) => {
   // Get user_id sent by client
   const { user_id } = socket.handshake.query;
 
@@ -44,4 +46,4 @@ app.use(express.json());
 app.use('/files', express.static(path.resolve(__dirname, '..', 'uploads')));
 app.use(routes);
 
-server.listen(3333);
+server.listen(PORT);
