@@ -11,7 +11,7 @@ export default function Dashboard() {
   const user_id = localStorage.getItem('aircnc:user');
 
   const socket = useMemo(
-    () => socketio('http://localhost:3333', { query: { user_id } }),
+    () => socketio(process.env.REACT_APP_API_URL, { query: { user_id } }),
     [user_id]
   );
 
