@@ -25,6 +25,8 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": "A project that aims to connect companies that want to open spots and developers looking for a place to exchange ideas with devs, get to know the company, and work there for a period.",
+    "githubUrl": "https://github.com/diegomais/aircnc"
   }
 }
