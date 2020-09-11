@@ -8,19 +8,17 @@ import {
   StyleSheet
 } from 'react-native';
 import socketio from 'socket.io-client';
-
+import getEnvironment from '../../environment';
 import SpotList from '../components/SpotList';
-
 import logo from '../../assets/logo.png';
 
 export default function List() {
   const [techs, setTechs] = useState([]);
+  const { apiUrl } = getEnvironment();
 
   useEffect(() => {
     AsyncStorage.getItem('aircnc:user').then(user_id => {
-      const socket = socketio('http://192.168.2.140:3333', {
-        query: { user_id }
-      });
+      const socket = socketio(apiUrl, { query: { user_id } });
 
       socket.on('booking_response', booking => {
         Alert.alert(
