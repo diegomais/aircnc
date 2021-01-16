@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img alt="Aircnc" src=".github/logo.png" width="250px" /><br>
+  <img alt="Aircnc" src="assets/logo.png" width="250px" /><br>
   <b>Aircnc: Code and coffee</b> ☕
 </h1>
 
@@ -22,7 +22,7 @@
 <br>
 
 <p align="center">
-  <img alt="Mobile and web" src=".github/aircnc.png" width="100%">
+  <img alt="Mobile and web" src="assets/aircnc.png" width="100%">
 </p>
 
 ## :rocket: Technologies
@@ -50,7 +50,7 @@ Aircnc is a project that aims to connect companies that want to open spots and d
 
 ## :bookmark: Layout
 
-You can download the project layout in `.sketch` format through [this link](.github/aircnc.sketch).
+You can download the project layout in `.sketch` format through [this link](assets/aircnc.sketch).
 
 To open the file in `.sketch` format on any operating system use the tool [Zeplin](https://zeplin.io).
 
