@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: ./packages/api
+      dockerfile: Dockerfile
+    container_name: aircnc_api
+    depends_on:
+      - mongo
+    networks:
+      - aircnc_network
+    ports:
+      - 3333:3333
+    restart: unless-stopped
+    volumes:
+      - ./packages/api/:/app/
+      - /app/node_modules/
+
+  web:
+    build:
+      context: ./packages/web
+      dockerfile: Dockerfile
+    container_name: aircnc_web
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    stdin_open: true
+    volumes:
+      - ./packages/web/:/app/
+      - /app/node_modules/
+
+  mongo:
+    container_name: aircnc_mongo
+    image: mongo
+    networks:
+      - aircnc_network
+    ports:
+      - 27017:27017
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+
+networks:
+  aircnc_network:
+
+volumes:
+  mongo_data:
