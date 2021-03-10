@@ -16,7 +16,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
     "react-native-gesture-handler": "~1.9.0",
     "react-native-reanimated": "~1.13.2",
-    "react-native-web": "^0.14.10",
+    "react-native-web": "^0.15.0",
     "react-navigation": "^4.4.3",
     "socket.io-client": "^2.4.0"
   },
