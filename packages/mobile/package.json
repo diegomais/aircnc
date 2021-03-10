@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "expo": "^35.0.0",
+    "expo": "^35.0.1",
     "expo-constants": "~7.0.0",
     "react": "16.8.3",
     "react-dom": "16.8.3",
