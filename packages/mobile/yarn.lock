@@ -2066,6 +2066,13 @@ expo-constants@~7.0.0:
   dependencies:
     ua-parser-js "^0.7.19"
 
+expo-constants@~7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-7.0.1.tgz#87be02b6dae5c44a3246537452a0d77af15d46bf"
+  integrity sha512-n9S6lsEfTAhLY+x/Yrtc1rvVUhuEF+CcSWr/reAIGtk35+PYrAKfV4pbetRtqX9tl947bJv7kBQX6jpwYpeIpQ==
+  dependencies:
+    ua-parser-js "^0.7.19"
+
 expo-file-system@~7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/expo-file-system/-/expo-file-system-7.0.0.tgz#ac98233b18774cce299fffd9451f08f21b116564"
