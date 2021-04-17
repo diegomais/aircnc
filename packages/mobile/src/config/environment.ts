@@ -1,14 +1,14 @@
 import Constants from 'expo-constants';
 
-const apiUrl = '';
+const apiURL = 'https://diegomais-aircnc.herokuapp.com';
 
 const ENV = {
-  dev: { envName: 'DEVELOPMENT', apiUrl },
-  staging: { envName: 'STAGING', apiUrl },
-  prod: { envName: 'PRODUCTION', apiUrl },
+  dev: { envName: 'DEVELOPMENT', apiURL: 'http://localhost:3333' },
+  prod: { envName: 'PRODUCTION', apiURL },
+  staging: { envName: 'STAGING', apiURL },
 };
 
-export default function getEnvironment() {
+export function getEnvironment() {
   const { releaseChannel } = Constants.manifest;
 
   if (releaseChannel === undefined) {
