@@ -10,7 +10,9 @@ const routes = require('./routes');
 const PORT = process.env.PORT || 3333;
 const app = express();
 const server = http.Server(app);
-const io = socketio(server);
+const io = socketio(server, {
+  cors: { origin: '*', methods: ['GET', 'POST'] },
+});
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -25,7 +27,7 @@ if (process.env.NODE_ENV === 'production') {
     ],
     tracesSampleRate: 1.0,
   });
-};
+}
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
