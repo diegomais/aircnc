@@ -1,56 +1,56 @@
-import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
-import { Layout } from '../../components/layout';
-import { USER_KEY } from '../../constants/storage';
-import io from 'socket.io-client';
-import { api } from '../../services/api';
-import styles from './styles.module.scss';
+import Link from 'next/link'
+import { useEffect, useMemo, useState } from 'react'
+import { Layout } from '../../components/layout'
+import { USER_KEY } from '../../constants/storage'
+import io from 'socket.io-client'
+import { api } from '../../services/api'
+import styles from './styles.module.scss'
 
-export function DashboardTemplate() {
-  const [spots, setSpots] = useState([]);
-  const [requests, setRequests] = useState([]);
-  const [userId, setUserId] = useState('');
+export function DashboardTemplate(): JSX.Element {
+  const [spots, setSpots] = useState([])
+  const [requests, setRequests] = useState([])
+  const [userId, setUserId] = useState('')
 
   useEffect(() => {
-    setUserId(localStorage.getItem(USER_KEY));
-  }, []);
+    setUserId(localStorage.getItem(USER_KEY))
+  }, [])
 
   const socket = useMemo(
     () => io(process.env.NEXT_PUBLIC_API_URL, { query: { user_id: userId } }),
     [userId]
-  );
+  )
 
   useEffect(() => {
     socket.on('booking_request', (data) => {
-      setRequests([...requests, data]);
-    });
-  }, [requests, socket]);
+      setRequests([...requests, data])
+    })
+  }, [requests, socket])
 
   useEffect(() => {
     async function loadSpots() {
       const response = await api.get('/dashboard', {
         headers: { user_id: userId },
-      });
+      })
 
-      setSpots(response.data);
+      setSpots(response.data)
     }
 
-    loadSpots();
-  }, [userId]);
+    loadSpots()
+  }, [userId])
 
   async function handleAccept(id) {
     await api.post(`/bookings/${id}/approvals`, null, {
       headers: { user_id: userId },
-    });
+    })
 
-    setRequests(requests.filter((request) => request._id !== id));
+    setRequests(requests.filter((request) => request._id !== id))
   }
   async function handleReject(id) {
     await api.post(`/bookings/${id}/rejections`, null, {
       headers: { user_id: userId },
-    });
+    })
 
-    setRequests(requests.filter((request) => request._id !== id));
+    setRequests(requests.filter((request) => request._id !== id))
   }
 
   return (
@@ -90,5 +90,5 @@ export function DashboardTemplate() {
         <button className={styles.btn}>Add new spot</button>
       </Link>
     </Layout>
-  );
+  )
 }

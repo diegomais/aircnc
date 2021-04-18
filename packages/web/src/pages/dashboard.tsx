@@ -1,7 +1,7 @@
-import Head from 'next/head';
-import { DashboardTemplate } from '../templates/dashboard';
+import Head from 'next/head'
+import { DashboardTemplate } from '../templates/dashboard'
 
-export default function DashboardPage() {
+export default function DashboardPage(): JSX.Element {
   return (
     <>
       <Head>
@@ -10,5 +10,5 @@ export default function DashboardPage() {
       </Head>
       <DashboardTemplate />
     </>
-  );
+  )
 }
