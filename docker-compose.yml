@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.8'
 
 services:
   api:
@@ -20,14 +20,16 @@ services:
   web:
     build:
       context: ./packages/web
-      dockerfile: Dockerfile
+      target: deps
+    command: yarn dev
     container_name: aircnc_web
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3333
     ports:
       - 3000:3000
-    restart: unless-stopped
-    stdin_open: true
     volumes:
       - ./packages/web/:/app/
+      - /app/.next
       - /app/node_modules/
 
   mongo:

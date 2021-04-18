@@ -1,0 +1,35 @@
+.thumbnail {
+  margin-bottom: 20px;
+  border: 1px dashed #ddd;
+  background-size: cover;
+  cursor: pointer;
+  height: 160px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  input {
+    display: none;
+  }
+}
+
+.has-thumbnail {
+  margin-bottom: 20px;
+  border: 0;
+  background-size: cover;
+  cursor: pointer;
+  height: 160px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  input {
+    display: none;
+  }
+
+  img {
+    display: none;
+  }
+}
