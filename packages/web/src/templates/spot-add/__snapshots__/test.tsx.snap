@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AddSpotTemplate /> matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="container"
+  >
+    <img
+      alt="aircnc"
+      src="images/logo.svg"
+    />
+    <main
+      class="main"
+    >
+      <form
+        class="form"
+      >
+        <label
+          class="thumbnail"
+        >
+          <input
+            type="file"
+          />
+          <img
+            alt="Select img"
+            src="images/camera.svg"
+          />
+        </label>
+        <label
+          for="company"
+        >
+          Company
+          <input
+            id="company"
+            placeholder="Company name"
+            value=""
+          />
+        </label>
+        <label
+          for="techs"
+        >
+          Technologies 
+          <span>
+            (comma separated)
+          </span>
+          <input
+            id="techs"
+            placeholder="Techs used by company"
+            value=""
+          />
+        </label>
+        <label
+          for="price"
+        >
+          Price 
+          <span>
+            (blank for free)
+          </span>
+          <input
+            id="price"
+            placeholder="Price per day"
+            value=""
+          />
+        </label>
+        <button
+          class="btn"
+          type="submit"
+        >
+          Add new spot
+        </button>
+      </form>
+    </main>
+  </div>
+</DocumentFragment>
+`;

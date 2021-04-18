@@ -1,1 +1,1 @@
-export const USER_KEY = 'aircnc:user';
+export const USER_KEY = 'aircnc:user'

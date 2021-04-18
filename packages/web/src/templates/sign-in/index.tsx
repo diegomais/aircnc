@@ -1,22 +1,22 @@
-import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { Layout } from '../../components/layout';
-import { USER_KEY } from '../../constants/storage';
-import { api } from '../../services/api';
-import styles from './styles.module.scss';
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { Layout } from '../../components/layout'
+import { USER_KEY } from '../../constants/storage'
+import { api } from '../../services/api'
+import styles from './styles.module.scss'
 
-export function SignInTemplate() {
-  const router = useRouter();
-  const [email, setEmail] = useState('');
+export function SignInTemplate(): JSX.Element {
+  const router = useRouter()
+  const [email, setEmail] = useState('')
 
   async function handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault()
 
-    const response = await api.post('/sessions', { email });
+    const response = await api.post('/sessions', { email })
 
-    localStorage.setItem(USER_KEY, response.data._id);
+    localStorage.setItem(USER_KEY, response.data._id)
 
-    router.push('/dashboard');
+    router.push('/dashboard')
   }
 
   return (
@@ -43,5 +43,5 @@ export function SignInTemplate() {
         </button>
       </form>
     </Layout>
-  );
+  )
 }

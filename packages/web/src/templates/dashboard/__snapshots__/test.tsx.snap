@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DashboardTemplate /> matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="container"
+  >
+    <img
+      alt="aircnc"
+      src="images/logo.svg"
+    />
+    <main
+      class="main"
+    >
+      <ul
+        class="notifications"
+      />
+      <ul
+        class="spots"
+      >
+        <li>
+          <header
+            style="background-image: url(image.png);"
+          />
+          <strong>
+            bar
+          </strong>
+          <span>
+            Free
+          </span>
+        </li>
+      </ul>
+      <button
+        class="btn"
+      >
+        Add new spot
+      </button>
+    </main>
+  </div>
+</DocumentFragment>
+`;

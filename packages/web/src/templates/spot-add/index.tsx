@@ -1,36 +1,36 @@
-import { useRouter } from 'next/router';
-import React, { useMemo, useState } from 'react';
-import { Layout } from '../../components/layout';
-import { USER_KEY } from '../../constants/storage';
-import { api } from '../../services/api';
-import styles from './styles.module.scss';
+import { useRouter } from 'next/router'
+import React, { useMemo, useState } from 'react'
+import { Layout } from '../../components/layout'
+import { USER_KEY } from '../../constants/storage'
+import { api } from '../../services/api'
+import styles from './styles.module.scss'
 
-export function AddSpotTemplate() {
-  const router = useRouter();
-  const [thumbnail, setThumbnail] = useState(null);
-  const [company, setCompany] = useState('');
-  const [techs, setTechs] = useState('');
-  const [price, setPrice] = useState('');
+export function AddSpotTemplate(): JSX.Element {
+  const router = useRouter()
+  const [thumbnail, setThumbnail] = useState(null)
+  const [company, setCompany] = useState('')
+  const [techs, setTechs] = useState('')
+  const [price, setPrice] = useState('')
 
   const preview = useMemo(() => {
-    return thumbnail ? URL.createObjectURL(thumbnail) : null;
-  }, [thumbnail]);
+    return thumbnail ? URL.createObjectURL(thumbnail) : null
+  }, [thumbnail])
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const user_id = localStorage.getItem(USER_KEY);
+    const user_id = localStorage.getItem(USER_KEY)
 
-    const data = new FormData();
-    data.append('thumbnail', thumbnail);
-    data.append('company', company);
-    data.append('techs', techs);
-    data.append('price', price);
+    const data = new FormData()
+    data.append('thumbnail', thumbnail)
+    data.append('company', company)
+    data.append('techs', techs)
+    data.append('price', price)
 
-    await api.post('/spots', data, { headers: { user_id } });
+    await api.post('/spots', data, { headers: { user_id } })
 
-    router.push('/dashboard');
-  };
+    router.push('/dashboard')
+  }
 
   return (
     <Layout>
@@ -81,5 +81,5 @@ export function AddSpotTemplate() {
         </button>
       </form>
     </Layout>
-  );
+  )
 }
