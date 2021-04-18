@@ -1,6 +1,6 @@
 <h1 align="center">
-  <img alt="Aircnc" src="assets/logo.png" width="250px" /><br>
-  <b>Aircnc: Code and coffee</b> ☕
+  <img alt="aircnc" src="assets/logo.png" width="250px" /><br>
+  <b>aircnc: code and coffee</b> ☕
 </h1>
 
 <p align="center">
@@ -29,16 +29,17 @@
 
 This project was developed with the following technologies:
 
-- [Node.js](https://nodejs.org/en/)
+- [Node.js](https://nodejs.org)
 - [React](https://reactjs.org)
-- [React Native](https://facebook.github.io/react-native/)
-- [Expo](https://expo.io/)
+- [React Native](https://reactnative.dev)
 
 Extras:
 
 - Main Libs
   - [Express](https://expressjs.com)
   - [Mongoose ODM](https://mongoosejs.com)
+  - [Next.js](https://nextjs.org)
+  - [Expo](https://expo.io)
 - Style
   - [EditorConfig](https://editorconfig.org)
   - [ESLint](https://eslint.org)
@@ -46,7 +47,7 @@ Extras:
 
 ## :computer: Project
 
-Aircnc is a project that aims to connect companies that want to open spots and developers looking for a place to exchange ideas with devs, get to know the company and work there for a period.
+**Aircnc** is a project that aims to connect companies that want to open spots and developers looking for a place to exchange ideas with devs, get to know the company and work there for a period.
 
 ## :bookmark: Layout
 
@@ -58,70 +59,35 @@ To open the file in `.sketch` format on any operating system use the tool [Zepli
 
 These instructions will get you a copy of the full project up and running on your local machine for development and testing purposes.
 
+### API and Web App
+
+You can view this project immediately at [https://diegomais-aircnc.netlify.app](https://diegomais-aircnc.netlify.app).
+
 #### Setting up the development environment
 
-The project is developed using Git. Git is a free and open source distributed version control system. [Download Git](https://git-scm.com/downloads).
+You will need to install [Git](https://git-scm.com) and [Docker](https://www.docker.com) before following the instructions below.
 
-The project can be built with npm or Yarn, so choose one of the approach bellow in case you don't have any installed on your system.
+#### Installation using Docker Compose
 
-- **npm** is distributed with Node.js which means that when you download Node.js, you automatically get npm installed on your computer. [Download Node.js](https://nodejs.org/en/download/).
-- **Yarn** is a package manager built by Facebook Team and seems to be faster than npm in general. [Download Yarn](https://yarnpkg.com/en/docs/install).
+The following steps need to be performed inside a terminal window (Windows user may prefer to use the [Windows Terminal](https://aka.ms/windowsterminal) but the Command Prompt will also work).
 
-### Cloning the project
+Clone the repository and build Docker images:
 
-You can obtain the project by running the instruction bellow on your terminal:
+```bash
+git clone https://github.com/diegomais/aircnc.git
+cd aircnc
+docker-compose build
+```
 
-`git clone https://github.com/diegomais/aircnc.git`
+#### Running the services
 
-#### Setting up the database
+Use the following command to run all aircnc containers (from within the aircnc directory):
 
-The project uses [MongoDB](https://www.mongodb.com).
+```bash
+docker-compose up
+```
 
-We recommend use [Docker](https://www.docker.com) to install and run the database above.
-
-1. Install [Docker Desktop](https://www.docker.com/get-started).
-2. Start a MongoDB instance:
-   `docker run --name aircnc-mongo -p 27017:27107 -d mongo`
-
-### API
-
-#### Adding environment variables
-
-1. Rename the file `.env.example` on `packages/api` directory to `.env`.
-2. Add the MongoDB URI (e.g. `mongodb://localhost:27017/aircnc`) into `.env` file.
-
-#### Installing dependencies and running the server
-
-Run the instructions bellow inside `packages/api` directory:
-
-1. `npm install`
-2. `npm run dev`
-
-or
-
-1. `yarn install`
-2. `yarn dev`
-
-### Web
-
-Web application available at [https://diegomais-aircnc.netlify.app](https://diegomais-aircnc.netlify.app).
-
-#### Adding environment variables
-
-1. Rename the file `.env.example` on `packages/web` directory to `.env`.
-2. Add the API URL (e.g. `http://localhost:3333`) into `.env` file.
-
-#### Installing dependencies and running the web application
-
-Run the instructions bellow inside `packages/web` directory:
-
-1. `npm install`
-2. `npm start`
-
-or
-
-1. `yarn install`
-2. `yarn start`
+You can now use the API at [http://localhost:3333](http://localhost:3333) and view the Web App in the browser at [http://localhost:3000](http://localhost:3000).
 
 ### Mobile
 
@@ -129,12 +95,7 @@ With an Android phone, you can load this project immediately at [https://expo.io
 
 #### Setting up the development environment
 
-Follow the instructions for Expo CLI available in the official [React Native Documentation](https://reactnative.dev/docs/environment-setup).
-
-#### Adding environment variables
-
-1. Rename the file `environment.example.js` on `packages/mobile` directory to `environment.js`.
-2. Add the API URL (e.g. `http://localhost:3333`) into `.env` file.
+You will need to install [npm](https://nodejs.org/en/download/) or [Yarn](https://yarnpkg.com/en/docs/install) and [Expo CLI](https://docs.expo.io/get-started/installation/) before following the instructions below.
 
 #### Installing dependencies and running the mobile application
 
