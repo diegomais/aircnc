@@ -27,7 +27,7 @@
     "socket.io-client": "^4.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
+    "@babel/core": "7.13.16",
     "@types/react": "~16.9.35",
     "@types/react-native": "~0.63.2",
     "@types/socket.io-client": "^1.4.36",
