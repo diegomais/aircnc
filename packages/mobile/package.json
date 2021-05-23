@@ -24,7 +24,7 @@
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "3.2.0",
     "react-native-web": "0.16.1",
-    "socket.io-client": "4.0.1"
+    "socket.io-client": "4.1.2"
   },
   "devDependencies": {
     "@babel/core": "7.14.0",
