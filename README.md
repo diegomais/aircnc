@@ -100,7 +100,7 @@ You will need to install [npm](https://nodejs.org/en/download/) or [Yarn](https:
 
 #### Installing dependencies and running the mobile application
 
-Run the instructions bellow inside `packages/mobile` directory:
+Run the instructions bellow inside `mobile` directory:
 
 1. `npm install`
 2. `expo start`
