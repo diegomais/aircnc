@@ -4,11 +4,11 @@ on:
   push:
     branches: [ main ]
     paths:
-    - 'packages/web/**'
+    - 'web/**'
   pull_request:
     branches: [ main ]
     paths:
-    - 'packages/web/**'
+    - 'web/**'
   workflow_dispatch:
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: packages/web
+        working-directory: web
     strategy:
       matrix:
         node-version: [12.x, 14.x]
