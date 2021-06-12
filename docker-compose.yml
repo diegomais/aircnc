@@ -3,7 +3,7 @@ version: '3.8'
 services:
   api:
     build:
-      context: ./packages/api
+      context: ./api
       dockerfile: Dockerfile
     container_name: aircnc_api
     depends_on:
@@ -14,12 +14,12 @@ services:
       - 3333:3333
     restart: unless-stopped
     volumes:
-      - ./packages/api/:/app/
+      - ./api/:/app/
       - /app/node_modules/
 
   web:
     build:
-      context: ./packages/web
+      context: ./web
       target: deps
     command: yarn dev
     container_name: aircnc_web
@@ -28,7 +28,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./packages/web/:/app/
+      - ./web/:/app/
       - /app/.next
       - /app/node_modules/
 
