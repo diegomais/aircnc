@@ -1,14 +1,14 @@
-name: Backend CI
+name: Frontend CI
 
 on:
   push:
     branches: [main]
     paths:
-      - 'backend/**'
+      - 'frontend/**'
   pull_request:
     branches: [main]
     paths:
-      - 'backend/**'
+      - 'frontend/**'
   workflow_dispatch:
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: backend
+        working-directory: frontend
     strategy:
       matrix:
         node-version: [12.x, 14.x, 16.x]
@@ -29,13 +29,13 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      - name: Check code for problems
-        run: npx eslint .
-      - name: Check code formatting
+      - name: Linter
+        run: npx eslint --format=stylish .
+      - name: Formatter
         run: npx prettier --check .
+      - name: Type check
+        run: yarn type-check
       - name: Test project
-        run: npx jest --ci
-      - name: E2E Test
-        run: npx jest --config ./test/jest-e2e.json --ci
+        run: yarn test
       - name: Build project
         run: yarn build

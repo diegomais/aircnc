@@ -8,7 +8,8 @@
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/diegomais/aircnc?style=for-the-badge">
   <img alt="GitHub license" src="https://img.shields.io/github/license/diegomais/aircnc?style=for-the-badge">
   <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/diegomais/aircnc?style=for-the-badge">
-  <img alt="GitHub Actions: Web App CI" src="https://img.shields.io/github/workflow/status/diegomais/aircnc/Web%20App%20CI?label=Web%20App%20CI&style=for-the-badge">
+  <img alt="GitHub Actions: Backend CI" src="https://img.shields.io/github/workflow/status/diegomais/aircnc/Backend%20CI?label=Backend%20CI&style=for-the-badge">
+  <img alt="GitHub Actions: Frontend CI" src="https://img.shields.io/github/workflow/status/diegomais/aircnc/Frontend%20CI?label=Frontend%20CI&style=for-the-badge">
 </p>
 
 <p align="center">
