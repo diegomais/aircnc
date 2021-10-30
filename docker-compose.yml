@@ -17,18 +17,18 @@ services:
       - ./api/:/app/
       - /app/node_modules/
 
-  web:
+  frontend:
     build:
-      context: ./web
+      context: ./frontend
       target: deps
     command: yarn dev
-    container_name: aircnc_web
+    container_name: aircnc_frontend
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:3333
     ports:
       - 3000:3000
     volumes:
-      - ./web/:/app/
+      - ./frontend/:/app/
       - /app/.next
       - /app/node_modules/
 
