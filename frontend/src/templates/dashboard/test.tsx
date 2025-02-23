@@ -10,6 +10,7 @@ describe('<DashboardTemplate />', () => {
   mockedApi.get = jest.fn().mockResolvedValue({
     data: [{ _id: 'foo', company: 'bar', thumbnail_url: 'image.png' }],
   })
+  jest.spyOn(Storage.prototype, 'getItem').mockReturnValue('some-user-id')
 
   it('matches snapshot', async () => {
     const { asFragment } = render(<DashboardTemplate />)

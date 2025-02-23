@@ -1,18 +1,19 @@
-version: '3.8'
-
 services:
   api:
     build:
       context: ./api
       dockerfile: Dockerfile
+    command: yarn dev
     container_name: aircnc_api
     depends_on:
       - mongo
+    environment:
+      API_URL: http://localhost:3333
+      MONGODB_URI: mongodb://mongo:27017/aircnc
     networks:
       - aircnc_network
     ports:
       - 3333:3333
-    restart: unless-stopped
     volumes:
       - ./api/:/app/
       - /app/node_modules/
@@ -39,7 +40,6 @@ services:
       - aircnc_network
     ports:
       - 27017:27017
-    restart: unless-stopped
     volumes:
       - mongo_data:/data/db
 
