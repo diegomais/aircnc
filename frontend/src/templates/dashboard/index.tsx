@@ -35,7 +35,9 @@ export function DashboardTemplate(): JSX.Element {
       setSpots(response.data)
     }
 
-    loadSpots()
+    if (userId) {
+      loadSpots()
+    }
   }, [userId])
 
   async function handleAccept(id) {
