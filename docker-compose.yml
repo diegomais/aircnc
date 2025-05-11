@@ -2,7 +2,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      target: deps
     command: yarn dev
     container_name: aircnc_backend
     depends_on:
