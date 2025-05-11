@@ -1,0 +1,33 @@
+### Global variables
+@baseUrl = http://localhost:3333
+@userId = {{login.response.body._id}}
+@spotId = {{spotsByTech.response.body.0._id}}
+
+### Login
+# @name login
+POST {{baseUrl}}/sessions
+content-type: application/json
+
+{
+    "email": "user@example.com"
+}
+
+### Get dashboard
+GET {{baseUrl}}/dashboard
+content-type: application/json
+user_id: {{userId}}
+
+### List spots by tech
+# @name spotsByTech
+GET {{baseUrl}}/spots?tech=Rocket
+content-type: application/json
+user_id: {{userId}}
+
+### Book spot
+POST {{baseUrl}}/spots/{{spotId}}/bookings HTTP/1.1
+content-type: application/json
+user_id: {{userId}}
+
+{
+    "date": "2025-01-01"
+}
