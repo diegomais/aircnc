@@ -1,10 +1,10 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
 import { Server } from 'socket.io';
-import { createServer } from 'http';
+import { createServer } from 'node:http';
 import Sentry from '@sentry/node';
 import Tracing from '@sentry/tracing';
 import routes from './routes.js';
