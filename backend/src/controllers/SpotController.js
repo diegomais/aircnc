@@ -1,7 +1,7 @@
-const User = require('../models/User');
-const Spot = require('../models/Spot');
+import User from '../models/User.js';
+import Spot from '../models/Spot.js';
 
-module.exports = {
+export default {
   async index(req, res) {
     const { tech } = req.query;
 
@@ -18,7 +18,7 @@ module.exports = {
     const user = await User.findById(user_id);
 
     if (!user) {
-      return res.status(400).json({ error: 'User does not exists.' });
+      return res.status(400).json({ error: 'User does exists.' });
     }
 
     const spot = await Spot.create({

@@ -1,13 +1,13 @@
-const express = require('express');
-const multer = require('multer');
-const uploadConfig = require('./config/upload');
+import express from 'express';
+import multer from 'multer';
+import uploadConfig from './config/upload.js';
 
-const SessionController = require('./controllers/SessionController');
-const SpotController = require('./controllers/SpotController');
-const BookingController = require('./controllers/BookingController');
-const DashboardController = require('./controllers/DashboardController');
-const ApprovalController = require('./controllers/ApprovalController');
-const RejectionController = require('./controllers/RejectionController');
+import SessionController from './controllers/SessionController.js';
+import SpotController from './controllers/SpotController.js';
+import BookingController from './controllers/BookingController.js';
+import DashboardController from './controllers/DashboardController.js';
+import ApprovalController from './controllers/ApprovalController.js';
+import RejectionController from './controllers/RejectionController.js';
 
 const routes = express.Router();
 const upload = multer(uploadConfig);
@@ -23,4 +23,4 @@ routes.post('/bookings/:booking_id/rejections', RejectionController.store);
 
 routes.get('/dashboard', DashboardController.show);
 
-module.exports = routes;
+export default routes;

@@ -1,21 +1,26 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const path = require('path');
-const socketio = require('socket.io');
-const http = require('http');
-const Sentry = require('@sentry/node');
-const Tracing = require('@sentry/tracing');
-const routes = require('./routes');
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+import { Server } from 'socket.io';
+import { createServer } from 'http';
+import Sentry from '@sentry/node';
+import Tracing from '@sentry/tracing';
+import routes from './routes.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
-const server = http.Server(app);
-const io = socketio(server, {
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
   cors: { origin: '*', methods: ['GET', 'POST'] },
 });
 
 if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
+  const dotenv = await import('dotenv');
+  dotenv.config();
 }
 
 if (process.env.NODE_ENV === 'production') {
@@ -63,7 +68,7 @@ app.use(Sentry.Handlers.tracingHandler());
 app.get('/debug-sentry', (req, res) => {
   throw new Error('My first Sentry error!');
 });
-app.use('/files', express.static(path.resolve(__dirname, '..', 'uploads')));
+app.use('/files', express.static(resolve(__dirname, '..', 'uploads')));
 app.use(routes);
 app.use(Sentry.Handlers.errorHandler());
 app.use((err, req, res, next) => {
@@ -71,4 +76,4 @@ app.use((err, req, res, next) => {
   res.end(res.sentry + '\n');
 });
 
-module.exports = server;
+export default httpServer;

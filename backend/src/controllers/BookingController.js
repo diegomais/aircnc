@@ -1,8 +1,8 @@
-const Booking = require('../models/Booking');
-const Spot = require('../models/Spot');
-const User = require('../models/User');
+import Booking from '../models/Booking.js';
+import Spot from '../models/Spot.js';
+import User from '../models/User.js';
 
-module.exports = {
+export default {
   async store(req, res) {
     const { user_id } = req.headers;
     const { spot_id } = req.params;

@@ -1,4 +1,6 @@
-const { Schema, model } = require('mongoose');
+import mongoose from 'mongoose';
+
+const { Schema, model } = mongoose;
 
 const SpotSchema = new Schema(
   {
@@ -26,4 +28,4 @@ SpotSchema.virtual('thumbnail_url').get(function() {
   return `${process.env.API_URL}/files/${this.thumbnail}`;
 });
 
-module.exports = model('Spot', SpotSchema);
+export default model('Spot', SpotSchema);

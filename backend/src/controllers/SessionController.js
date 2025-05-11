@@ -1,6 +1,6 @@
-const User = require('../models/User');
+import User from '../models/User.js';
 
-module.exports = {
+export default {
   async store(req, res) {
     const { email } = req.body;
 

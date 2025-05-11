@@ -1,6 +1,6 @@
-const Booking = require('../models/Booking');
+import Booking from '../models/Booking.js';
 
-module.exports = {
+export default {
   async store(req, res) {
     const { booking_id } = req.params;
     if (!booking_id) {
