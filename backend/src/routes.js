@@ -13,7 +13,7 @@ import { SpotsRepository } from './repositories/SpotsRepository.js';
 import { UsersRepository } from './repositories/UsersRepository.js'
 
 import { SessionService } from './services/SessionService.js'
-import { SpotService } from './services/SpotService.js';
+import { SpotsService } from './services/SpotsService.js';
 
 const routes = express.Router();
 const upload = multer(uploadConfig);
@@ -31,8 +31,8 @@ routes.post('/bookings/:booking_id/approvals', ApprovalController.store);
 routes.post('/bookings/:booking_id/rejections', RejectionController.store);
 
 const spotsRepository = new SpotsRepository();
-const spotService = new SpotService({ spotsRepository });
-const dashboardController = new DashboardController({ spotService });
+const spotsService = new SpotsService({ spotsRepository });
+const dashboardController = new DashboardController({ spotsService });
 routes.get('/dashboard', dashboardController.show);
 
 export default routes;

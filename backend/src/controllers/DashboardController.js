@@ -1,6 +1,6 @@
 export class DashboardController {
-  constructor({ spotService }) {
-    this._spotService = spotService;
+  constructor({ spotsService }) {
+    this._spotsService = spotsService;
   }
 
   show = async (req, res) => {
@@ -10,7 +10,7 @@ export class DashboardController {
       return res.status(400).json({ error: 'User ID is required.' });
     }
 
-    const spots = await this._spotService.listByUserId(user_id);
+    const spots = await this._spotsService.listByUserId(user_id);
 
     return res.json(spots);
   };

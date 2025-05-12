@@ -1,4 +1,4 @@
-export class SpotService {
+export class SpotsService {
   constructor({ spotsRepository }) {
     this._spotsRepository = spotsRepository;
   }
