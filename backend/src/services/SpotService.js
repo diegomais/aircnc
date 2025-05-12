@@ -1,9 +1,9 @@
 export class SpotService {
-  constructor({ spotRepository }) {
-    this._spotRepository = spotRepository;
+  constructor({ spotsRepository }) {
+    this._spotsRepository = spotsRepository;
   }
 
   async listByUserId(userId) {
-    return await this._spotRepository.findByUserId(userId);
+    return await this._spotsRepository.findByUserId(userId);
   }
-} 
+}

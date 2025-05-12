@@ -9,7 +9,7 @@ import { DashboardController } from './controllers/DashboardController.js';
 import ApprovalController from './controllers/ApprovalController.js';
 import RejectionController from './controllers/RejectionController.js';
 
-import { SpotRepository } from './repositories/SpotRepository.js';
+import { SpotsRepository } from './repositories/SpotsRepository.js';
 import { UsersRepository } from './repositories/UsersRepository.js'
 
 import { SessionService } from './services/SessionService.js'
@@ -30,8 +30,8 @@ routes.post('/spots/:spot_id/bookings', BookingController.store);
 routes.post('/bookings/:booking_id/approvals', ApprovalController.store);
 routes.post('/bookings/:booking_id/rejections', RejectionController.store);
 
-const spotRepository = new SpotRepository();
-const spotService = new SpotService({ spotRepository });
+const spotsRepository = new SpotsRepository();
+const spotService = new SpotService({ spotsRepository });
 const dashboardController = new DashboardController({ spotService });
 routes.get('/dashboard', dashboardController.show);
 
