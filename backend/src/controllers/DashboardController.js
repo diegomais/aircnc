@@ -1,11 +1,17 @@
-import Spot from '../models/Spot.js';
+export class DashboardController {
+  constructor({ spotsService }) {
+    this._spotsService = spotsService;
+  }
 
-export default {
-  async show(req, res) {
-    const { user_id: user } = req.headers;
+  show = async (req, res) => {
+    const { user_id } = req.headers;
 
-    const spots = await Spot.find({ user });
+    if (!user_id) {
+      return res.status(400).json({ error: 'User ID is required.' });
+    }
+
+    const spots = await this._spotsService.listByUserId(user_id);
 
     return res.json(spots);
-  },
-};
+  };
+}

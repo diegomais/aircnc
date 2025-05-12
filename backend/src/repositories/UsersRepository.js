@@ -6,7 +6,6 @@ export class UsersRepository {
   }
 
   async findByEmail(email) {
-    console.log(email)
     return await User.findOne({ email });
   }
 }
