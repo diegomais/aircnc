@@ -1,15 +1,13 @@
-import User from '../models/User.js';
+export class SessionController {
+  constructor({ sessionService }) {
+    this._sessionService = sessionService
+  }
 
-export default {
-  async store(req, res) {
+  create = async (req, res) => {
     const { email } = req.body;
 
-    let user = await User.findOne({ email });
-
-    if (!user) {
-      user = await User.create({ email });
-    }
+    const user = await this._sessionService.create(email);
 
     return res.json(user);
-  },
+  }
 };

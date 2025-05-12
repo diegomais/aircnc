@@ -2,17 +2,24 @@ import express from 'express';
 import multer from 'multer';
 import uploadConfig from './config/upload.js';
 
-import SessionController from './controllers/SessionController.js';
+import { SessionController } from './controllers/SessionController.js';
 import SpotController from './controllers/SpotController.js';
 import BookingController from './controllers/BookingController.js';
 import DashboardController from './controllers/DashboardController.js';
 import ApprovalController from './controllers/ApprovalController.js';
 import RejectionController from './controllers/RejectionController.js';
 
+import { UsersRepository } from './repositories/UsersRepository.js'
+
+import { SessionService } from './services/SessionService.js'
+
 const routes = express.Router();
 const upload = multer(uploadConfig);
 
-routes.post('/sessions', SessionController.store);
+const usersRepository = new UsersRepository();
+const sessionService = new SessionService({ usersRepository });
+const sessionController = new SessionController({ sessionService });
+routes.post('/sessions', sessionController.create);
 
 routes.get('/spots', SpotController.index);
 routes.post('/spots', upload.single('thumbnail'), SpotController.store);
