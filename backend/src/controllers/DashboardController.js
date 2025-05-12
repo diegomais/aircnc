@@ -1,11 +1,13 @@
-import Spot from '../models/Spot.js';
+export class DashboardController {
+  constructor({ spotService }) {
+    this._spotService = spotService;
+  }
 
-export default {
-  async show(req, res) {
-    const { user_id: user } = req.headers;
-
-    const spots = await Spot.find({ user });
+  show = async (req, res) => {
+    const { user_id } = req.headers;
+    
+    const spots = await this._spotService.listByUserId(user_id);
 
     return res.json(spots);
-  },
-};
+  };
+}
