@@ -1,24 +1,26 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    project: 'tsconfig.json',
-    sourceType: 'module',
-  },
-  plugins: ['@typescript-eslint/eslint-plugin'],
-  extends: [
-    'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
-  ],
-  root: true,
   env: {
+    commonjs: true,
+    es6: true,
     node: true,
-    jest: true,
   },
-  ignorePatterns: ['.eslintrc.js'],
+  extends: ['airbnb-base', 'prettier'],
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
+  },
+  parserOptions: {
+    ecmaVersion: 2018,
+  },
+  plugins: ['prettier'],
   rules: {
-    '@typescript-eslint/interface-name-prefix': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
+    // Enable eslint-plugin-prettier that formats content using Prettier
+    'prettier/prettier': 'error',
+    // Don't enforce that class methods utilize this
+    'class-methods-use-this': 'off',
+    // Allow unused variable for next (Express middlewares needs)
+    'no-unused-vars': ['error', { argsIgnorePattern: 'next' }],
+    // Don't require CamelCase
+    camelcase: 'off',
   },
 };

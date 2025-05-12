@@ -1,6 +1,6 @@
-const Booking = require('../models/Booking');
+import Booking from '../models/Booking.js';
 
-module.exports = {
+export default {
   async store(req, res) {
     const { booking_id } = req.params;
     if (!booking_id) {
@@ -26,10 +26,10 @@ module.exports = {
     if (String(booking.spot.user) !== String(user_id)) {
       return res
         .status(400)
-        .json({ error: 'Access denied to reject this request.' });
+        .json({ error: 'Access denied to accept this request.' });
     }
 
-    booking.approved = false;
+    booking.approved = true;
 
     await booking.save();
 
