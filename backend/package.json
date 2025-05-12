@@ -5,8 +5,9 @@
   "main": "src/server.js",
   "license": "MIT",
   "scripts": {
+    "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "test": "node --test"
   },
   "dependencies": {
     "@sentry/node": "^6.0.0",
