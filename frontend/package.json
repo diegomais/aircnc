@@ -23,7 +23,7 @@
     "socket.io-client": "4.4.0"
   },
   "devDependencies": {
-    "@babel/core": "7.16.0",
+    "@babel/core": "7.27.1",
     "@testing-library/jest-dom": "5.15.1",
     "@testing-library/react": "12.1.2",
     "@testing-library/user-event": "13.5.0",
