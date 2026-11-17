@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img alt="aircnc" src="assets/logo.png" width="250px" /><br>
+  <img alt="aircnc" src="docs/assets/logo.png" width="250px" /><br>
   <b>aircnc: code and coffee</b> ☕
 </h1>
 
@@ -24,7 +24,7 @@
 <br>
 
 <p align="center">
-  <img alt="Mobile and web" src="assets/aircnc.png" width="100%">
+  <img alt="Mobile and web" src="docs/assets/aircnc.png" width="100%">
 </p>
 
 ## :rocket: Technologies
@@ -53,7 +53,7 @@ Extras:
 
 ## :bookmark: Layout
 
-You can download the project layout in `.sketch` format through [this link](assets/aircnc.sketch).
+You can download the project layout in `.sketch` format through [this link](docs/assets/aircnc.sketch).
 
 To open the file in `.sketch` format on any operating system use the tool [Zeplin](https://zeplin.io).
 
