@@ -20,7 +20,7 @@ jobs:
         working-directory: frontend
     strategy:
       matrix:
-        node-version: [22.x]
+        node-version: [24.x]
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
