@@ -1,7 +1,7 @@
 services:
   backend:
     build:
-      context: ./backend
+      context: ./apps/backend
       target: deps
     command: yarn dev
     container_name: aircnc_backend
@@ -15,12 +15,12 @@ services:
     ports:
       - 3333:3333
     volumes:
-      - ./backend/:/app/
+      - ./apps/backend/:/app/
       - /app/node_modules/
 
   frontend:
     build:
-      context: ./frontend
+      context: ./apps/frontend
       target: deps
     command: yarn dev
     container_name: aircnc_frontend
@@ -29,7 +29,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./frontend/:/app/
+      - ./apps/frontend/:/app/
       - /app/.next
       - /app/node_modules/
 
