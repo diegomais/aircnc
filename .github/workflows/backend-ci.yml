@@ -5,13 +5,19 @@ on:
     branches:
       - "main"
     paths:
-      - "backend/**"
+      - "apps/backend/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
 
   pull_request:
     branches:
       - "main"
     paths:
-      - "backend/**"
+      - "apps/backend/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
 
   workflow_dispatch:
 
@@ -22,7 +28,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: backend
+        working-directory: apps/backend
 
     strategy:
       matrix:
@@ -34,21 +40,21 @@ jobs:
       - name: Detect package manager
         id: detect-package-manager
         run: |
-          if [ -f "${{ github.workspace }}/apps/backend/yarn.lock" ]; then
-            echo "manager=yarn" >> $GITHUB_OUTPUT
-            echo "command=install" >> $GITHUB_OUTPUT
-            echo "runner=yarn" >> $GITHUB_OUTPUT
-            exit 0
-          elif [ -f "${{ github.workspace }}/apps/backend/pnpm-lock.yaml" ]; then
+          if [ -f "${{ github.workspace }}/pnpm-lock.yaml" ]; then
             echo "manager=pnpm" >> $GITHUB_OUTPUT
-            echo "command=install" >> $GITHUB_OUTPUT
-            echo "runner=pnpm" >> $GITHUB_OUTPUT
-            exit 0
-          elif [ -f "${{ github.workspace }}/apps/backend/package.json" ]; then
+            echo "command=install --frozen-lockfile --filter aircnc-backend..." >> $GITHUB_OUTPUT
+            echo "runner=pnpm --filter aircnc-backend" >> $GITHUB_OUTPUT
+            echo "cache-dependency-path=pnpm-lock.yaml" >> $GITHUB_OUTPUT
+          elif [ -f "${{ github.workspace }}/apps/backend/yarn.lock" ]; then
+            echo "manager=yarn" >> $GITHUB_OUTPUT
+            echo "command=install --frozen-lockfile" >> $GITHUB_OUTPUT
+            echo "runner=yarn" >> $GITHUB_OUTPUT
+            echo "cache-dependency-path=apps/backend/yarn.lock" >> $GITHUB_OUTPUT
+          elif [ -f "${{ github.workspace }}/apps/backend/package-lock.json" ]; then
             echo "manager=npm" >> $GITHUB_OUTPUT
             echo "command=ci" >> $GITHUB_OUTPUT
-            echo "runner=npx --no-install" >> $GITHUB_OUTPUT
-            exit 0
+            echo "runner=npm run" >> $GITHUB_OUTPUT
+            echo "cache-dependency-path=apps/backend/package-lock.json" >> $GITHUB_OUTPUT
           else
             echo "Unable to determine package manager"
             exit 1
@@ -57,14 +63,14 @@ jobs:
         if: ${{ steps.detect-package-manager.outputs.manager == 'pnpm' }}
         uses: pnpm/action-setup@v4
         with:
+          version: 12.0.0
           run_install: false
-          version: 10
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
-          cache-dependency-path: "backend"
           node-version: ${{ matrix.node-version }}
+          cache: ${{ steps.detect-package-manager.outputs.manager }}
+          cache-dependency-path: ${{ steps.detect-package-manager.outputs.cache-dependency-path }}
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Run tests
