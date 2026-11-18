@@ -1,19 +1,26 @@
-# Set base image
 FROM node:24-alpine AS base
+RUN corepack enable
 
-# Install dependencies only when needed
 FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/backend/package.json ./apps/backend/package.json
+COPY apps/frontend/package.json ./apps/frontend/package.json
+COPY apps/mobile/package.json ./apps/mobile/package.json
+RUN pnpm install --frozen-lockfile --filter aircnc-backend...
 
-# Production image, copy all the files and run app
-FROM base
+FROM base AS runner
 WORKDIR /app
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/backend/package.json ./apps/backend/package.json
+COPY apps/frontend/package.json ./apps/frontend/package.json
+COPY apps/mobile/package.json ./apps/mobile/package.json
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY --from=deps /app/apps/backend/node_modules ./apps/backend/node_modules
+COPY apps/backend/src ./apps/backend/src
+COPY apps/backend/uploads ./apps/backend/uploads
 
 ENV API_URL="http://localhost:3333"
 ENV MONGODB_URI="mongodb://localhost:27017/aircnc"
@@ -23,4 +30,4 @@ ENV PORT=3333
 
 EXPOSE 3333
 
-CMD ["yarn", "start"]
+CMD ["pnpm", "--filter", "aircnc-backend", "start"]

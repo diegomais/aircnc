@@ -1,12 +1,14 @@
 services:
   backend:
     build:
-      context: ./apps/backend
+      context: .
+      dockerfile: apps/backend/Dockerfile
       target: deps
-    command: yarn dev
+    command: pnpm --filter aircnc-backend dev
     container_name: aircnc_backend
     depends_on:
       - mongo
+    working_dir: /app
     environment:
       API_URL: http://localhost:3333
       MONGODB_URI: mongodb://mongo:27017/aircnc
@@ -15,23 +17,27 @@ services:
     ports:
       - 3333:3333
     volumes:
-      - ./apps/backend/:/app/
+      - ./apps/backend/:/app/apps/backend/
       - /app/node_modules/
+      - /app/apps/backend/node_modules/
 
   frontend:
     build:
-      context: ./apps/frontend
+      context: .
+      dockerfile: apps/frontend/Dockerfile
       target: deps
-    command: yarn dev
+    command: pnpm --filter aircnc-frontend dev
     container_name: aircnc_frontend
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:3333
+    working_dir: /app
     ports:
-      - 3000:3000
+      - 3002:3000
     volumes:
-      - ./apps/frontend/:/app/
-      - /app/.next
+      - ./apps/frontend/:/app/apps/frontend/
+      - /app/apps/frontend/.next
       - /app/node_modules/
+      - /app/apps/frontend/node_modules/
 
   mongo:
     container_name: aircnc_mongo
