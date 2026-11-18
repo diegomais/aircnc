@@ -67,7 +67,11 @@ You can view this project immediately at [https://diegomais-aircnc.netlify.app](
 
 #### Setting up the development environment
 
-You will need to install [Git](https://git-scm.com) and [Docker](https://www.docker.com) before following the instructions below.
+For Docker Compose, install [Git](https://git-scm.com) and [Docker](https://www.docker.com). For local development, install [Node.js 24](https://nodejs.org/en/download/) and [pnpm 12](https://pnpm.io/installation), then install dependencies from the repository root:
+
+```bash
+pnpm install
+```
 
 #### Installation using Docker Compose
 
@@ -95,21 +99,24 @@ You can now use the API at [http://localhost:3333](http://localhost:3333) and vi
 
 With an Android phone, you can load this project immediately at [https://expo.io/@diegomais/aircnc](https://expo.io/@diegomais/aircnc).
 
-#### Setting up the development environment
+The [Expo CLI](https://docs.expo.dev/more/expo-cli/) is included in the `expo` dependency declared by the mobile app. It is installed with `pnpm install`, so no global Expo CLI installation is needed.
 
-You will need to install [npm](https://nodejs.org/en/download/) or [Yarn](https://yarnpkg.com/en/docs/install) and [Expo CLI](https://docs.expo.io/get-started/installation/) before following the instructions below.
+#### Running the applications
 
-#### Installing dependencies and running the mobile application
+Run each command from the repository root:
 
-Run the instructions bellow inside `mobile` directory:
+```bash
+# API
+pnpm --filter aircnc-backend dev
 
-1. `npm install`
-2. `expo start`
+# Web app
+pnpm --filter aircnc-frontend dev
 
-or
+# Mobile app
+pnpm --filter ./apps/mobile start
+```
 
-1. `yarn install`
-2. `expo start`
+For the mobile app, use `pnpm --filter ./apps/mobile android` or `pnpm --filter ./apps/mobile ios` to launch on a device or emulator.
 
 ## :thinking: How to contribute
 
