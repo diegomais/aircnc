@@ -4,11 +4,17 @@ on:
   push:
     branches: [main]
     paths:
-      - "frontend/**"
+      - "apps/frontend/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
   pull_request:
     branches: [main]
     paths:
-      - "frontend/**"
+      - "apps/frontend/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
   workflow_dispatch:
 
 jobs:
@@ -17,25 +23,58 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: frontend
+        working-directory: apps/frontend
     strategy:
       matrix:
         node-version: [24.x]
     steps:
       - uses: actions/checkout@v4
+      - name: Detect package manager
+        id: detect-package-manager
+        run: |
+          if [ -f "${{ github.workspace }}/pnpm-lock.yaml" ]; then
+            echo "manager=pnpm" >> $GITHUB_OUTPUT
+            echo "install-command=install --frozen-lockfile --filter aircnc-frontend..." >> $GITHUB_OUTPUT
+            echo "script-runner=pnpm run" >> $GITHUB_OUTPUT
+            echo "exec-runner=pnpm exec" >> $GITHUB_OUTPUT
+            echo "cache-dependency-path=pnpm-lock.yaml" >> $GITHUB_OUTPUT
+          elif [ -f "${{ github.workspace }}/apps/frontend/yarn.lock" ]; then
+            echo "manager=yarn" >> $GITHUB_OUTPUT
+            echo "install-command=install --frozen-lockfile" >> $GITHUB_OUTPUT
+            echo "script-runner=yarn" >> $GITHUB_OUTPUT
+            echo "exec-runner=yarn" >> $GITHUB_OUTPUT
+            echo "cache-dependency-path=apps/frontend/yarn.lock" >> $GITHUB_OUTPUT
+          elif [ -f "${{ github.workspace }}/apps/frontend/package-lock.json" ]; then
+            echo "manager=npm" >> $GITHUB_OUTPUT
+            echo "install-command=ci" >> $GITHUB_OUTPUT
+            echo "script-runner=npm run" >> $GITHUB_OUTPUT
+            echo "exec-runner=npm exec --" >> $GITHUB_OUTPUT
+            echo "cache-dependency-path=apps/frontend/package-lock.json" >> $GITHUB_OUTPUT
+          else
+            echo "Unable to determine package manager"
+            exit 1
+          fi
+      - name: Install pnpm
+        if: ${{ steps.detect-package-manager.outputs.manager == 'pnpm' }}
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.0.0
+          run_install: false
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: ${{ steps.detect-package-manager.outputs.manager }}
+          cache-dependency-path: ${{ steps.detect-package-manager.outputs.cache-dependency-path }}
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.install-command }}
       - name: Linter
-        run: npx eslint --format=stylish .
+        run: ${{ steps.detect-package-manager.outputs.exec-runner }} eslint --format=stylish .
       - name: Formatter
-        run: npx prettier --check .
+        run: ${{ steps.detect-package-manager.outputs.exec-runner }} prettier --check .
       - name: Type check
-        run: yarn type-check
+        run: ${{ steps.detect-package-manager.outputs.script-runner }} type-check
       - name: Test project
-        run: yarn test
+        run: ${{ steps.detect-package-manager.outputs.script-runner }} test
       - name: Build project
-        run: yarn build
+        run: ${{ steps.detect-package-manager.outputs.script-runner }} build
