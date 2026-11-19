@@ -32,7 +32,7 @@ services:
       - NEXT_PUBLIC_API_URL=http://localhost:3333
     working_dir: /app
     ports:
-      - 3002:3000
+      - 3000:3000
     volumes:
       - ./apps/frontend/:/app/apps/frontend/
       - /app/apps/frontend/.next
