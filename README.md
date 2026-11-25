@@ -113,10 +113,10 @@ pnpm --filter aircnc-backend dev
 pnpm --filter aircnc-frontend dev
 
 # Mobile app
-pnpm --filter ./apps/mobile start
+pnpm --filter aircnc-mobile start
 ```
 
-For the mobile app, use `pnpm --filter ./apps/mobile android` or `pnpm --filter ./apps/mobile ios` to launch on a device or emulator.
+For the mobile app, use `pnpm --filter aircnc-mobile android` or `pnpm --filter aircnc-mobile ios` to launch on a device or emulator.
 
 ## :thinking: How to contribute
 
