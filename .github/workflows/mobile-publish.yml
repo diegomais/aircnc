@@ -55,5 +55,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --filter aircnc-mobile...
 
+      - name: Verify mobile app
+        run: pnpm run verify
+
       - name: Publish app update
         run: eas update --auto --non-interactive
