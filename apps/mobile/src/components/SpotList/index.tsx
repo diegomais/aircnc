@@ -1,13 +1,17 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useCallback, useEffect, useState } from 'react';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useCallback, useEffect, useState } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import { BOOK_SCREEN } from '../../constants/screens';
-import { api } from '../../services/api';
+import { BOOK_SCREEN } from '@/constants/screens';
+import type { RootStackParamList } from '@/navigation/types';
+import { api } from '@/services/api';
 import { styles as s } from './styles';
 
 type Props = {
   tech: string;
 };
+
+type Navigation = NativeStackNavigationProp<RootStackParamList>;
 
 type Spot = {
   _id: string;
@@ -17,7 +21,7 @@ type Spot = {
 };
 
 export function SpotList({ tech }: Props) {
-  const { navigate } = useNavigation();
+  const navigation = useNavigation<Navigation>();
   const [spots, setSpots] = useState<Spot[]>([]);
 
   useEffect(() => {
@@ -28,9 +32,9 @@ export function SpotList({ tech }: Props) {
 
   const handleNavigate = useCallback(
     (id: string) => {
-      navigate(BOOK_SCREEN, { id });
+      navigation.navigate(BOOK_SCREEN, { id });
     },
-    [navigate]
+    [navigation.navigate]
   );
 
   return (

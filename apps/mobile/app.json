@@ -1,32 +1,23 @@
 {
   "expo": {
-    "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#ffffff",
-        "foregroundImage": "./assets/adaptive-icon.png"
-      }
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "description": "A project that aims to connect companies that want to open spots and developers looking for a place to exchange ideas with devs, get to know the company, and work there for a period.",
-    "githubUrl": "https://github.com/diegomais/aircnc",
+    "name": "aircnc",
+    "slug": "aircnc",
+    "version": "1.0.0",
+    "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true
     },
-    "name": "aircnc",
-    "orientation": "portrait",
-    "slug": "aircnc",
-    "splash": {
-      "backgroundColor": "#ffffff",
-      "image": "./assets/splash.png",
-      "resizeMode": "contain"
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
     },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "version": "1.1.0",
     "web": {
       "favicon": "./assets/favicon.png"
     }

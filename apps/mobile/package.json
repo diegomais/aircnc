@@ -1,38 +1,30 @@
 {
   "name": "aircnc-mobile",
-  "main": "node_modules/expo/AppEntry.js",
+  "version": "1.0.0",
+  "main": "src/app/index.ts",
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "@react-navigation/native": "^7.5.2",
+    "@react-navigation/native-stack": "^7.21.1",
+    "axios": "^1.21.1",
+    "expo": "~58.0.26",
+    "expo-status-bar": "~58.0.5",
+    "react": "19.3.0",
+    "react-native": "0.88.1",
+    "react-native-safe-area-context": "~5.11.1",
+    "react-native-screens": "~4.30.1",
+    "socket.io-client": "4.4.0"
+  },
+  "devDependencies": {
+    "@types/react": "~19.3.0",
+    "@types/socket.io-client": "1.4.36",
+    "typescript": "~6.0.3"
+  },
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web",
-    "eject": "expo eject"
-  },
-  "dependencies": {
-    "@react-native-async-storage/async-storage": "1.15.13",
-    "@react-native-community/masked-view": "0.1.11",
-    "@react-navigation/native": "5.9.4",
-    "@react-navigation/stack": "5.14.5",
-    "axios": "1.20.0",
-    "expo": "41.0.1",
-    "expo-constants": "10.1.3",
-    "expo-status-bar": "1.1.0",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
-    "react-native-gesture-handler": "1.10.3",
-    "react-native-reanimated": "2.10.0",
-    "react-native-safe-area-context": "3.3.2",
-    "react-native-screens": "3.9.0",
-    "react-native-web": "0.17.5",
-    "socket.io-client": "4.4.0"
-  },
-  "devDependencies": {
-    "@babel/core": "7.16.0",
-    "@types/react": "16.14.21",
-    "@types/react-native": "0.63.52",
-    "@types/socket.io-client": "1.4.36",
-    "typescript": "4.4.4"
+    "web": "expo start --web"
   },
   "private": true
 }

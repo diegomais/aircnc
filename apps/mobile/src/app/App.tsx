@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { AuthProvider } from './src/contexts/auth';
-import { Navigation } from './src/navigation';
+import { AuthProvider } from '@/contexts/auth';
+import { Navigation } from '@/navigation';
 
 export default function App() {
   return (
