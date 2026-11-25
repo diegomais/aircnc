@@ -20,6 +20,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.adminCommand(\"ping\").ok'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     defaults:
       run:
         shell: bash
@@ -78,3 +88,25 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.script-runner }} test
       - name: Build project
         run: ${{ steps.detect-package-manager.outputs.script-runner }} build
+        env:
+          NEXT_PUBLIC_API_URL: http://127.0.0.1:3333
+      - name: Start backend API
+        run: |
+          node src/server.js > "$RUNNER_TEMP/aircnc-backend.log" 2>&1 &
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:3333/healthz; then
+              exit 0
+            fi
+            sleep 2
+          done
+          cat "$RUNNER_TEMP/aircnc-backend.log"
+          exit 1
+        working-directory: apps/backend
+        env:
+          API_URL: http://127.0.0.1:3333
+          MONGODB_URI: mongodb://127.0.0.1:27017/aircnc
+          PORT: 3333
+      - name: Install Playwright Chromium
+        run: ${{ steps.detect-package-manager.outputs.exec-runner }} playwright install --with-deps chromium
+      - name: Run end-to-end tests
+        run: ${{ steps.detect-package-manager.outputs.script-runner }} test:e2e
