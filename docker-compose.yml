@@ -7,7 +7,8 @@ services:
     command: pnpm --filter aircnc-backend dev
     container_name: aircnc_backend
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
     working_dir: /app
     environment:
       API_URL: http://localhost:3333
@@ -20,6 +21,16 @@ services:
       - ./apps/backend/:/app/apps/backend/
       - /app/node_modules/
       - /app/apps/backend/node_modules/
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3333/healthz').then((response) => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
 
   frontend:
     build:
@@ -28,6 +39,9 @@ services:
       target: deps
     command: pnpm --filter aircnc-frontend dev
     container_name: aircnc_frontend
+    depends_on:
+      backend:
+        condition: service_healthy
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:3333
     working_dir: /app
@@ -38,12 +52,33 @@ services:
       - /app/apps/frontend/.next
       - /app/node_modules/
       - /app/apps/frontend/node_modules/
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000').then((response) => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
 
   mongo:
     container_name: aircnc_mongo
     image: mongo
     networks:
       - aircnc_network
+    healthcheck:
+      test:
+        - CMD
+        - mongosh
+        - --quiet
+        - --eval
+        - "db.adminCommand('ping').ok"
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
     ports:
       - 27017:27017
     volumes:
