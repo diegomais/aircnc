@@ -65,6 +65,13 @@ app.use(cors());
 app.use(express.json());
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
+app.get('/healthz', (_req, res) => {
+  const databaseReady = mongoose.connection.readyState === 1;
+
+  return res
+    .status(databaseReady ? 200 : 503)
+    .json({ status: databaseReady ? 'ok' : 'unavailable' });
+});
 app.get('/debug-sentry', (req, res) => {
   throw new Error('My first Sentry error!');
 });
