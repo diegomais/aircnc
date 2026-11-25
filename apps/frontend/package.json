@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.29.6",
+    "@playwright/test": "^1.65.1",
     "@testing-library/jest-dom": "5.15.1",
     "@testing-library/react": "12.1.2",
     "@testing-library/user-event": "13.5.0",
