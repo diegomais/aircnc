@@ -1,29 +1,31 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import React from 'react';
-import * as routes from '../constants/screens';
-import { useAuth } from '../contexts/auth';
-import { BookScreen } from '../screens/Book';
-import { ListScreen } from '../screens/List';
-import { SignInScreen } from '../screens/SignIn';
+import { createStaticNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import type { ComponentType } from 'react';
+import * as routes from '@/constants/screens';
+import { useIsSignedIn, useIsSignedOut } from '@/contexts/auth';
+import { BookScreen } from '@/screens/Book';
+import { ListScreen } from '@/screens/List';
+import { SignInScreen } from '@/screens/SignIn';
+import { RootStackParamList } from './types';
 
-const Stack = createStackNavigator();
+const RootStack = createNativeStackNavigator<RootStackParamList>({
+  screens: {
+    [routes.LIST_SCREEN]: {
+      if: useIsSignedIn,
+      screen: ListScreen,
+    },
+    [routes.BOOK_SCREEN]: {
+      if: useIsSignedIn,
+      screen: BookScreen,
+    },
+    [routes.SIGN_IN_SCREEN]: {
+      if: useIsSignedOut,
+      screen: SignInScreen,
+    },
+  },
+  screenOptions: {
+    headerShown: false,
+  }
+});
 
-export function Navigation() {
-  const { user } = useAuth();
-
-  return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {user?.id ? (
-          <>
-            <Stack.Screen name={routes.LIST_SCREEN} component={ListScreen} />
-            <Stack.Screen name={routes.BOOK_SCREEN} component={BookScreen} />
-          </>
-        ) : (
-          <Stack.Screen name={routes.SIGN_IN_SCREEN} component={SignInScreen} />
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
+export const Navigation = createStaticNavigation(RootStack) as ComponentType;

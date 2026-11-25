@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   Image,
   KeyboardAvoidingView,
@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useAuth } from '../../contexts/auth';
+import { useAuth } from '@/contexts/auth';
 import { styles as s } from './styles';
 
 export function SignInScreen() {

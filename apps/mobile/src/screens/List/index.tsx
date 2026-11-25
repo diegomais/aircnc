@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import {
   Alert,
   Image,
@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import io from 'socket.io-client';
-import { SpotList } from '../../components/SpotList';
-import { getEnvironment } from '../../config/environment';
-import { useAuth } from '../../contexts/auth';
+import { SpotList } from '@/components/SpotList';
+import { getConfig } from '@/config/environment';
+import { useAuth } from '@/contexts/auth';
 import { styles as s } from './styles';
 
 type Booking = {
@@ -21,7 +21,7 @@ type Booking = {
 };
 
 export function ListScreen() {
-  const { apiURL } = getEnvironment();
+  const { apiURL } = getConfig();
   const { signOut, user } = useAuth();
 
   useEffect(() => {
@@ -37,6 +37,11 @@ export function ListScreen() {
         }.`
       );
     });
+
+    return () => {
+      socket.disconnect();
+      socket.removeAllListeners();
+    };
   }, [user?.id]);
 
   return (

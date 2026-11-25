@@ -1,5 +1,6 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
-import React, { useCallback, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useCallback, useState } from 'react';
 import {
   Alert,
   Image,
@@ -8,19 +9,16 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import { useAuth } from '../../contexts/auth';
-import { api } from '../../services/api';
+import { useAuth } from '@/contexts/auth';
+import type { RootStackParamList } from '@/navigation/types';
+import { api } from '@/services/api';
 import { styles as s } from './styles';
 
-type RouteParams = {
-  id: string;
-};
+type Props = NativeStackScreenProps<RootStackParamList, 'Book'>;
 
-export function BookScreen() {
+export function BookScreen({ route: { params: { id } } }: Props) {
   const { user } = useAuth();
-  const { goBack } = useNavigation();
-  const { params } = useRoute();
-  const { id } = params as RouteParams;
+  const navigation = useNavigation();
   const [date, setDate] = useState('');
 
   const handleSubmit = useCallback(() => {
@@ -32,13 +30,16 @@ export function BookScreen() {
       )
       .then(() => {
         Alert.alert('Reservation request sent.');
-        goBack();
+        navigation.goBack();
+      }).catch((error) => {
+        console.error(JSON.stringify(error.response, null, 2));
+        Alert.alert('Failed to send reservation request.');
       });
-  }, [date, goBack, id, user?.id]);
+  }, [date, navigation.goBack, id, user?.id]);
 
   const handleCancel = useCallback(() => {
-    goBack();
-  }, [goBack]);
+    navigation.goBack();
+  }, [navigation.goBack]);
 
   return (
     <SafeAreaView style={s.container}>

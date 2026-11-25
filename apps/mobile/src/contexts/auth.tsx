@@ -1,13 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {
+import {
   createContext,
+  use,
   useCallback,
   useContext,
   useEffect,
   useState,
 } from 'react';
-import { TECHS_KEY, USER_ID_KEY } from '../constants/storage';
-import { api } from '../services/api';
+import { TECHS_KEY, USER_ID_KEY } from '@/constants/storage';
+import { api } from '@/services/api';
 
 type User = {
   id: string;
@@ -28,7 +29,7 @@ type AuthContextData = {
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
-export const AuthProvider: React.FC = ({ children }) => {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User>({} as User);
   const [loading, setLoading] = useState(true);
 
@@ -78,4 +79,14 @@ export const useAuth = (): AuthContextData => {
   }
 
   return context;
+};
+
+export const useIsSignedIn = () => {
+  const { user } = use(AuthContext);
+  return !!user?.id;
+};
+
+export const useIsSignedOut = () => {
+  const { user } = use(AuthContext);
+  return !user?.id;
 };

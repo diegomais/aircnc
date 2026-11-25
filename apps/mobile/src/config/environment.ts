@@ -1,27 +1,23 @@
-import Constants from 'expo-constants';
+import * as Updates from 'expo-updates';
 
-const apiURL = 'https://diegomais-aircnc.herokuapp.com';
+const herokuURL = 'https://diegomais-aircnc.herokuapp.com';
 
 const ENV = {
   dev: { envName: 'DEVELOPMENT', apiURL: 'http://localhost:3333' },
-  prod: { envName: 'PRODUCTION', apiURL },
-  staging: { envName: 'STAGING', apiURL },
+  prod: { envName: 'PRODUCTION', apiURL: herokuURL },
+  staging: { envName: 'STAGING', apiURL: herokuURL },
 };
 
-export function getEnvironment() {
-  const { releaseChannel } = Constants.manifest;
+export function getConfig() {
+  const channel = Updates.channel;
 
-  if (releaseChannel === undefined) {
-    // no releaseChannel (is undefined) in dev
-    return ENV.dev; // dev env settings
+  if (__DEV__ || channel == null) {
+    return ENV.dev;
   }
-  if (releaseChannel.indexOf('prod') !== -1) {
-    // matches prod-v1, prod-v2, prod-v3
-    return ENV.prod; // prod env settings
+
+  if (channel.startsWith('staging')) {
+    return ENV.staging;
   }
-  if (releaseChannel.indexOf('staging') !== -1) {
-    // matches staging-v1, staging-v2
-    return ENV.staging; // stage env settings
-  }
-  return ENV.dev;
+
+  return ENV.prod;
 }
