@@ -1,4 +1,4 @@
-// import Constants from 'expo-constants';
+import * as Updates from 'expo-updates';
 
 const herokuURL = 'https://diegomais-aircnc.herokuapp.com';
 
@@ -9,19 +9,15 @@ const ENV = {
 };
 
 export function getConfig() {
-  // const { releaseChannel } = Constants.manifest;
+  const channel = Updates.channel;
 
-  // if (releaseChannel === undefined) {
-  //   // no releaseChannel (is undefined) in dev
-  //   return ENV.dev; // dev env settings
-  // }
-  // if (releaseChannel.indexOf('prod') !== -1) {
-  //   // matches prod-v1, prod-v2, prod-v3
-  //   return ENV.prod; // prod env settings
-  // }
-  // if (releaseChannel.indexOf('staging') !== -1) {
-  //   // matches staging-v1, staging-v2
-  //   return ENV.staging; // stage env settings
-  // }
-  return ENV.dev;
+  if (__DEV__ || channel == null) {
+    return ENV.dev;
+  }
+
+  if (channel.startsWith('staging')) {
+    return ENV.staging;
+  }
+
+  return ENV.prod;
 }
