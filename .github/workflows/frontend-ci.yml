@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
     paths:
+      - ".github/workflows/frontend-ci.yml"
+      - "apps/backend/**"
       - "apps/frontend/**"
       - "package.json"
       - "pnpm-lock.yaml"
@@ -11,15 +13,26 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - ".github/workflows/frontend-ci.yml"
+      - "apps/backend/**"
       - "apps/frontend/**"
       - "package.json"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  build:
+  frontend:
+    name: Frontend checks (Node 24)
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     services:
       mongo:
         image: mongo:6.0
@@ -30,81 +43,72 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-    defaults:
-      run:
-        shell: bash
-        working-directory: apps/frontend
-    strategy:
-      matrix:
-        node-version: [24.x]
     steps:
       - uses: actions/checkout@v4
-      - name: Detect package manager
-        id: detect-package-manager
-        run: |
-          if [ -f "${{ github.workspace }}/pnpm-lock.yaml" ]; then
-            echo "manager=pnpm" >> $GITHUB_OUTPUT
-            echo "install-command=install --frozen-lockfile --filter aircnc-frontend... --filter aircnc-backend..." >> $GITHUB_OUTPUT
-            echo "script-runner=pnpm run" >> $GITHUB_OUTPUT
-            echo "exec-runner=pnpm exec" >> $GITHUB_OUTPUT
-            echo "cache-dependency-path=pnpm-lock.yaml" >> $GITHUB_OUTPUT
-          elif [ -f "${{ github.workspace }}/apps/frontend/yarn.lock" ]; then
-            echo "manager=yarn" >> $GITHUB_OUTPUT
-            echo "install-command=install --frozen-lockfile" >> $GITHUB_OUTPUT
-            echo "script-runner=yarn" >> $GITHUB_OUTPUT
-            echo "exec-runner=yarn" >> $GITHUB_OUTPUT
-            echo "cache-dependency-path=apps/frontend/yarn.lock" >> $GITHUB_OUTPUT
-          elif [ -f "${{ github.workspace }}/apps/frontend/package-lock.json" ]; then
-            echo "manager=npm" >> $GITHUB_OUTPUT
-            echo "install-command=ci" >> $GITHUB_OUTPUT
-            echo "script-runner=npm run" >> $GITHUB_OUTPUT
-            echo "exec-runner=npm exec --" >> $GITHUB_OUTPUT
-            echo "cache-dependency-path=apps/frontend/package-lock.json" >> $GITHUB_OUTPUT
-          else
-            echo "Unable to determine package manager"
-            exit 1
-          fi
-      - name: Install pnpm
-        if: ${{ steps.detect-package-manager.outputs.manager == 'pnpm' }}
-        uses: pnpm/action-setup@v4
+
+      - uses: pnpm/action-setup@v4
         with:
           version: 12.0.0
           run_install: false
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
-          cache-dependency-path: ${{ steps.detect-package-manager.outputs.cache-dependency-path }}
-      - name: Install dependencies
-        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.install-command }}
-      - name: Linter
-        run: ${{ steps.detect-package-manager.outputs.exec-runner }} eslint --format=stylish .
-      - name: Type check
-        run: ${{ steps.detect-package-manager.outputs.script-runner }} typecheck
-      - name: Test project
-        run: ${{ steps.detect-package-manager.outputs.script-runner }} test
-      - name: Build project
-        run: ${{ steps.detect-package-manager.outputs.script-runner }} build
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install frontend and backend dependencies
+        run: pnpm install --frozen-lockfile --filter aircnc-frontend... --filter aircnc-backend...
+
+      - name: Lint
+        run: pnpm --filter aircnc-frontend lint
+
+      - name: Typecheck
+        run: pnpm --filter aircnc-frontend typecheck
+
+      - name: Unit tests
+        run: pnpm --filter aircnc-frontend test
+
+      - name: Build static site
+        run: pnpm --filter aircnc-frontend build
         env:
           NEXT_PUBLIC_API_URL: http://127.0.0.1:3333
+
       - name: Start backend API
         run: |
-          node src/server.js > "$RUNNER_TEMP/aircnc-backend.log" 2>&1 &
+          pnpm --filter aircnc-backend start > "$RUNNER_TEMP/aircnc-backend.log" 2>&1 &
           for attempt in {1..30}; do
-            if curl --fail --silent http://127.0.0.1:3333/healthz; then
+            if curl --fail --silent http://127.0.0.1:3333/healthz > /dev/null; then
+              echo "Backend API is ready"
               exit 0
             fi
             sleep 2
           done
           cat "$RUNNER_TEMP/aircnc-backend.log"
           exit 1
-        working-directory: apps/backend
         env:
           API_URL: http://127.0.0.1:3333
           MONGODB_URI: mongodb://127.0.0.1:27017/aircnc
           PORT: 3333
+
       - name: Install Playwright Chromium
-        run: ${{ steps.detect-package-manager.outputs.exec-runner }} playwright install --with-deps chromium
-      - name: Run end-to-end tests
-        run: ${{ steps.detect-package-manager.outputs.script-runner }} test:e2e
+        run: pnpm --filter aircnc-frontend exec playwright install --with-deps chromium
+
+      - name: End-to-end tests
+        run: pnpm --filter aircnc-frontend test:e2e
+        env:
+          API_BASE_URL: http://127.0.0.1:3333
+          E2E_MONGODB_URI: mongodb://127.0.0.1:27017/aircnc
+          NEXT_PUBLIC_API_URL: http://127.0.0.1:3333
+          BASE_URL: http://127.0.0.1:3000
+
+      - name: Upload Playwright results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-playwright-results
+          path: |
+            apps/frontend/test-results/
+            apps/frontend/playwright-report/
+          if-no-files-found: ignore
+          retention-days: 7
