@@ -1,7 +1,7 @@
 import Head from 'next/head'
-import { SignInTemplate } from '../templates/sign-in'
+import { SignInTemplate } from '@/templates/sign-in'
 
-export default function SignInPage(): JSX.Element {
+export default function SignInPage() {
   return (
     <>
       <Head>

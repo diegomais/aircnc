@@ -1,15 +1,15 @@
 import { useRouter } from 'next/router'
-import { useState } from 'react'
-import { Layout } from '../../components/layout'
-import { USER_KEY } from '../../constants/storage'
-import { api } from '../../services/api'
+import { useState, type SubmitEvent } from 'react'
+import { Layout } from '@/components/layout'
+import { USER_KEY } from '@/constants/storage'
+import { api } from '@/services/api'
 import styles from './styles.module.scss'
 
-export function SignInTemplate(): JSX.Element {
+export function SignInTemplate() {
   const router = useRouter()
   const [email, setEmail] = useState('')
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
 
     const response = await api.post('/sessions', { email })

@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router'
-import React, { useMemo, useState } from 'react'
-import { Layout } from '../../components/layout'
-import { USER_KEY } from '../../constants/storage'
-import { api } from '../../services/api'
+import { useMemo, useState, type SubmitEvent } from 'react'
+import { Layout } from '@/components/layout'
+import { USER_KEY } from '@/constants/storage'
+import { api } from '@/services/api'
 import styles from './styles.module.scss'
 
-export function AddSpotTemplate(): JSX.Element {
+export function AddSpotTemplate() {
   const router = useRouter()
-  const [thumbnail, setThumbnail] = useState(null)
+  const [thumbnail, setThumbnail] = useState<File | null>(null)
   const [company, setCompany] = useState('')
   const [techs, setTechs] = useState('')
   const [price, setPrice] = useState('')
@@ -16,13 +16,15 @@ export function AddSpotTemplate(): JSX.Element {
     return thumbnail ? URL.createObjectURL(thumbnail) : null
   }, [thumbnail])
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const user_id = localStorage.getItem(USER_KEY)
 
     const data = new FormData()
-    data.append('thumbnail', thumbnail)
+    if (thumbnail) {
+      data.append('thumbnail', thumbnail)
+    }
     data.append('company', company)
     data.append('techs', techs)
     data.append('price', price)
@@ -36,12 +38,14 @@ export function AddSpotTemplate(): JSX.Element {
     <Layout>
       <form className={styles.form} onSubmit={handleSubmit}>
         <label
-          style={thumbnail && { backgroundImage: `url(${preview})` }}
+          style={
+            thumbnail ? { backgroundImage: `url(${preview})` } : undefined
+          }
           className={thumbnail ? styles['has-thumbnail'] : styles.thumbnail}
         >
           <input
             type="file"
-            onChange={(e) => setThumbnail(e.target.files[0])}
+            onChange={(e) => setThumbnail(e.target.files?.[0] ?? null)}
           />
           <img src={'images/camera.svg'} alt="Select img" />
         </label>

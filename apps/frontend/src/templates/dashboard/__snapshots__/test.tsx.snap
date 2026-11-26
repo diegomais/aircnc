@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<DashboardTemplate /> matches snapshot 1`] = `
 <DocumentFragment>
@@ -20,7 +20,7 @@ exports[`<DashboardTemplate /> matches snapshot 1`] = `
       >
         <li>
           <header
-            style="background-image: url(image.png);"
+            style="background-image: url("image.png");"
           />
           <strong>
             bar
@@ -30,11 +30,15 @@ exports[`<DashboardTemplate /> matches snapshot 1`] = `
           </span>
         </li>
       </ul>
-      <button
-        class="btn"
+      <a
+        href="/add"
       >
-        Add new spot
-      </button>
+        <button
+          class="btn"
+        >
+          Add new spot
+        </button>
+      </a>
     </main>
   </div>
 </DocumentFragment>

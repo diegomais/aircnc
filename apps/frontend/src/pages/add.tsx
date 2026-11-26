@@ -1,7 +1,7 @@
 import Head from 'next/head'
-import { AddSpotTemplate } from '../templates/spot-add'
+import { AddSpotTemplate } from '@/templates/spot-add'
 
-export default function AddSpotPage(): JSX.Element {
+export default function AddSpotPage() {
   return (
     <>
       <Head>

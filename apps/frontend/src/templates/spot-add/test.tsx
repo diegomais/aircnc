@@ -1,4 +1,3 @@
-import React from 'react'
 import { fireEvent, render } from '@testing-library/react'
 import { api } from '../../services/api'
 import { AddSpotTemplate } from '.'
@@ -24,8 +23,8 @@ describe('<AddSpotTemplate />', () => {
     fireEvent.change(getByPlaceholderText(/price per day/i), {
       target: { value: '99' },
     })
-    expect(spyPost).not.toBeCalled()
+    expect(spyPost).toHaveBeenCalledTimes(0)
     fireEvent.click(getByText(/add new spot/i))
-    expect(spyPost).toBeCalledTimes(1)
+    expect(spyPost).toHaveBeenCalledTimes(1)
   })
 })
