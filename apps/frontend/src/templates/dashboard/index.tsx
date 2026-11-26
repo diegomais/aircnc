@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
-import { Layout } from '../../components/layout'
-import { USER_KEY } from '../../constants/storage'
 import io from 'socket.io-client'
-import { api } from '../../services/api'
+import { Layout } from '@/components/layout'
+import { USER_KEY } from '@/constants/storage'
+import { api } from '@/services/api'
 import styles from './styles.module.scss'
 
-export function DashboardTemplate(): JSX.Element {
+export function DashboardTemplate() {
   const [spots, setSpots] = useState([])
   const [requests, setRequests] = useState([])
   const [userId, setUserId] = useState('')

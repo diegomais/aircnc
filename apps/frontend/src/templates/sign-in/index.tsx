@@ -1,11 +1,11 @@
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/compat/router'
 import { useState } from 'react'
-import { Layout } from '../../components/layout'
-import { USER_KEY } from '../../constants/storage'
-import { api } from '../../services/api'
+import { Layout } from '@/components/layout'
+import { USER_KEY } from '@/constants/storage'
+import { api } from '@/services/api'
 import styles from './styles.module.scss'
 
-export function SignInTemplate(): JSX.Element {
+export function SignInTemplate() {
   const router = useRouter()
   const [email, setEmail] = useState('')
 

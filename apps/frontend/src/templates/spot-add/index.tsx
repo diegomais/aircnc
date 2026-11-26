@@ -1,11 +1,11 @@
-import { useRouter } from 'next/router'
-import React, { useMemo, useState } from 'react'
-import { Layout } from '../../components/layout'
-import { USER_KEY } from '../../constants/storage'
-import { api } from '../../services/api'
+import { useRouter } from 'next/compat/router'
+import { useMemo, useState } from 'react'
+import { Layout } from '@/components/layout'
+import { USER_KEY } from '@/constants/storage'
+import { api } from '@/services/api'
 import styles from './styles.module.scss'
 
-export function AddSpotTemplate(): JSX.Element {
+export function AddSpotTemplate() {
   const router = useRouter()
   const [thumbnail, setThumbnail] = useState(null)
   const [company, setCompany] = useState('')

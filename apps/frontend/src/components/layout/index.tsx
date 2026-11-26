@@ -4,7 +4,7 @@ type Props = {
   children: React.ReactNode
 }
 
-export function Layout({ children }: Props): JSX.Element {
+export function Layout({ children }: Props) {
   return (
     <div className={styles.container}>
       <img src="images/logo.svg" alt="aircnc" />

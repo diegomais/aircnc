@@ -3,80 +3,41 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build",
     "dev": "next dev",
-    "format": "prettier --write .",
-    "lint": "eslint --fix . --ext ts --ext tsx --ext js",
+    "build": "next build",
     "start": "next start",
+    "lint": "eslint",
     "test": "jest",
-    "test:all": "yarn type-check && yarn test",
     "test:cov": "jest --coverage",
+    "test:e2e": "playwright test",
     "test:watch": "jest --watch",
-    "type-check": "tsc --pretty --noEmit"
+    "typecheck": "tsc --pretty --noEmit",
+    "verify": "pnpm run typecheck && pnpm run lint && pnpm run test"
   },
   "dependencies": {
     "axios": "1.20.0",
-    "next": "12.1.0",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "sass": "1.43.5",
+    "next": "16.4.6",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
     "socket.io-client": "4.4.0"
   },
   "devDependencies": {
-    "@babel/core": "7.29.6",
     "@playwright/test": "^1.65.1",
-    "@testing-library/jest-dom": "5.15.1",
-    "@testing-library/react": "12.1.2",
-    "@testing-library/user-event": "13.5.0",
-    "@types/jest": "26.0.24",
-    "@types/node": "16.18.126",
-    "@types/react": "17.0.3",
-    "@typescript-eslint/eslint-plugin": "4.33.0",
-    "@typescript-eslint/parser": "4.33.0",
-    "babel-jest": "26.6.3",
-    "eslint": "7.32.0",
-    "eslint-config-prettier": "8.3.0",
-    "eslint-plugin-jsx-a11y": "6.5.1",
-    "eslint-plugin-prettier": "3.4.1",
-    "eslint-plugin-react": "7.27.1",
-    "eslint-plugin-react-hooks": "4.2.0",
-    "identity-obj-proxy": "3.0.0",
-    "jest": "26.6.3",
-    "jest-watch-typeahead": "1.0.0",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^8.0.0",
+    "@testing-library/react": "^16.3.3",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.6",
+    "jest": "^30.5.2",
+    "jest-environment-jsdom": "^30.5.2",
     "mongodb": "4.17.2",
-    "prettier": "2.8.8",
-    "typescript": "4.7.4"
+    "sass": "^1.108.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5"
   },
-  "jest": {
-    "roots": [
-      "<rootDir>"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json",
-      "jsx"
-    ],
-    "testPathIgnorePatterns": [
-      "<rootDir>[/\\\\](node_modules|.next)[/\\\\]"
-    ],
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(ts|tsx)$"
-    ],
-    "transform": {
-      "^.+\\.[jt]sx?$": "babel-jest"
-    },
-    "watchPlugins": [
-      "jest-watch-typeahead/filename",
-      "jest-watch-typeahead/testname"
-    ],
-    "moduleNameMapper": {
-      "\\.(css|less|sass|scss)$": "identity-obj-proxy",
-      "\\.(gif|ttf|eot|svg|png)$": "<rootDir>/test/__mocks__/fileMock.js"
-    },
-    "setupFilesAfterEnv": [
-      "<rootDir>/.jest/setup.ts"
-    ]
-  }
+  "packageManager": "pnpm@12.0.0"
 }

@@ -1,7 +1,7 @@
 import Head from 'next/head'
-import { DashboardTemplate } from '../templates/dashboard'
+import { DashboardTemplate } from '@/templates/dashboard'
 
-export default function DashboardPage(): JSX.Element {
+export default function DashboardPage() {
   return (
     <>
       <Head>
