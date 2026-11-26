@@ -6,25 +6,49 @@ import { USER_KEY } from '@/constants/storage'
 import { api } from '@/services/api'
 import styles from './styles.module.scss'
 
+type Request = {
+  _id: string
+  date: string
+  user: {
+    email: string
+  }
+  spot: {
+    company: string
+  }
+}
+
+type Spot = {
+  _id: string
+  company: string
+  price: number
+  thumbnail_url: string
+}
+
+const websocketUri = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333'
+
 export function DashboardTemplate() {
-  const [spots, setSpots] = useState([])
-  const [requests, setRequests] = useState([])
+  const [spots, setSpots] = useState<Spot[]>([])
+  const [requests, setRequests] = useState<Request[]>([])
   const [userId, setUserId] = useState('')
 
   useEffect(() => {
-    setUserId(localStorage.getItem(USER_KEY))
+    setUserId(localStorage.getItem(USER_KEY) ?? '')
   }, [])
 
-  const socket = useMemo(
-    () => io(process.env.NEXT_PUBLIC_API_URL, { query: { user_id: userId } }),
-    [userId]
-  )
-
   useEffect(() => {
-    socket.on('booking_request', (data) => {
-      setRequests([...requests, data])
+    if (!userId) return
+
+    const socket = io(websocketUri, { query: { user_id: userId } })
+
+    socket.on('booking_request', (incomingRequest: Request) => {
+      setRequests(previousRequests => [...previousRequests, incomingRequest])
     })
-  }, [requests, socket])
+
+    return () => {
+      socket.disconnect()
+      socket.removeAllListeners()
+    }
+  }, [userId])
 
   useEffect(() => {
     async function loadSpots() {
@@ -40,14 +64,14 @@ export function DashboardTemplate() {
     }
   }, [userId])
 
-  async function handleAccept(id) {
+  async function handleAccept(id: string) {
     await api.post(`/bookings/${id}/approvals`, null, {
       headers: { user_id: userId },
     })
 
     setRequests(requests.filter((request) => request._id !== id))
   }
-  async function handleReject(id) {
+  async function handleReject(id: string) {
     await api.post(`/bookings/${id}/rejections`, null, {
       headers: { user_id: userId },
     })
