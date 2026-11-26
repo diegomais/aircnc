@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import io from 'socket.io-client'
 import { Layout } from '@/components/layout'
 import { USER_KEY } from '@/constants/storage'
@@ -29,11 +29,9 @@ const websocketUri = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333'
 export function DashboardTemplate() {
   const [spots, setSpots] = useState<Spot[]>([])
   const [requests, setRequests] = useState<Request[]>([])
-  const [userId, setUserId] = useState('')
-
-  useEffect(() => {
-    setUserId(localStorage.getItem(USER_KEY) ?? '')
-  }, [])
+  const [userId] = useState(() =>
+    typeof window === 'undefined' ? '' : (localStorage.getItem(USER_KEY) ?? '')
+  )
 
   useEffect(() => {
     if (!userId) return
