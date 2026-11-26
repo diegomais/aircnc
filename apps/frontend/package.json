@@ -3,15 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
     "test": "jest",
     "test:cov": "jest --coverage",
     "test:e2e": "playwright test",
     "test:watch": "jest --watch",
-    "typecheck": "tsc --pretty --noEmit",
+    "typecheck": "next typegen && tsc --pretty --noEmit",
     "verify": "pnpm run typecheck && pnpm run lint && pnpm run test"
   },
   "dependencies": {

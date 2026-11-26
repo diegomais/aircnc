@@ -3,12 +3,12 @@ import { Layout } from '.'
 
 describe('<LayoutComponent />', () => {
   it('matches snapshot', () => {
-    const { asFragment } = render(<Layout>{}</Layout>)
+    const { asFragment } = render(<Layout>{null}</Layout>)
     expect(asFragment()).toMatchSnapshot()
   })
 
   it('should show a logo image', () => {
-    const { getByAltText } = render(<Layout>{}</Layout>)
+    const { getByAltText } = render(<Layout>{null}</Layout>)
     expect(getByAltText(/aircnc/i)).toBeInTheDocument()
   })
 

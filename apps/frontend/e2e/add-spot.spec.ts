@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto'
+import type { Page } from '@playwright/test'
 import { expect, test } from './fixtures'
 
 const image = {
@@ -11,7 +12,7 @@ const image = {
 }
 
 async function fillSpotForm(
-  page,
+  page: Page,
   company: string,
   techs: string,
   price: string

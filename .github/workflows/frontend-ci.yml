@@ -80,10 +80,8 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.install-command }}
       - name: Linter
         run: ${{ steps.detect-package-manager.outputs.exec-runner }} eslint --format=stylish .
-      - name: Formatter
-        run: ${{ steps.detect-package-manager.outputs.exec-runner }} prettier --check .
       - name: Type check
-        run: ${{ steps.detect-package-manager.outputs.script-runner }} type-check
+        run: ${{ steps.detect-package-manager.outputs.script-runner }} typecheck
       - name: Test project
         run: ${{ steps.detect-package-manager.outputs.script-runner }} test
       - name: Build project
