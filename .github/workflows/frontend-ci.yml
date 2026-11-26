@@ -44,7 +44,7 @@ jobs:
         run: |
           if [ -f "${{ github.workspace }}/pnpm-lock.yaml" ]; then
             echo "manager=pnpm" >> $GITHUB_OUTPUT
-            echo "install-command=install --frozen-lockfile --filter aircnc-frontend..." >> $GITHUB_OUTPUT
+            echo "install-command=install --frozen-lockfile --filter aircnc-frontend... --filter aircnc-backend..." >> $GITHUB_OUTPUT
             echo "script-runner=pnpm run" >> $GITHUB_OUTPUT
             echo "exec-runner=pnpm exec" >> $GITHUB_OUTPUT
             echo "cache-dependency-path=pnpm-lock.yaml" >> $GITHUB_OUTPUT
