@@ -2,13 +2,17 @@
   "name": "aircnc-backend",
   "version": "1.0.0",
   "type": "module",
-  "main": "src/server.js",
+  "main": "dist/server.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon src/server.js",
-    "start": "node src/server.js",
-    "test": "node --test",
-    "test:e2e": "playwright test"
+    "dev": "tsx watch src/server.ts",
+    "build": "pnpm run typecheck && esbuild src/server.ts --bundle --platform=node --format=esm --packages=external --outdir=dist",
+    "start": "node dist/server.js",
+    "test": "tsx --test test/**/*.test.ts",
+    "test:e2e": "playwright test",
+    "lint": "eslint src test e2e playwright.config.ts --ext .ts",
+    "typecheck": "tsc --noEmit -p tsconfig.test.json",
+    "verify": "pnpm run test && pnpm run build"
   },
   "dependencies": {
     "@sentry/node": "^6.0.0",
@@ -22,12 +26,20 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.65.1",
-    "eslint": "6.8.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^4.17.25",
+    "@types/multer": "2.0.0",
+    "@types/node": "^24.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.74.0",
+    "@typescript-eslint/parser": "^8.74.0",
+    "esbuild": "0.28.2",
+    "eslint": "8.57.1",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-prettier": "3.4.1",
-    "nodemon": "3.1.10",
-    "prettier": "2.8.8"
+    "prettier": "2.8.8",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
   }
 }

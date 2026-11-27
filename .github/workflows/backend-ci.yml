@@ -22,8 +22,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  backend:
+    name: Backend checks (Node 24)
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     services:
       mongo:
@@ -46,8 +48,8 @@ jobs:
         node-version: [24.x]
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
       - name: Detect package manager
         id: detect-package-manager
         run: |
@@ -70,25 +72,35 @@ jobs:
             echo "Unable to determine package manager"
             exit 1
           fi
+
       - name: Install pnpm
         if: ${{ steps.detect-package-manager.outputs.manager == 'pnpm' }}
         uses: pnpm/action-setup@v4
         with:
           version: 12.0.0
           run_install: false
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: ${{ steps.detect-package-manager.outputs.manager }}
           cache-dependency-path: ${{ steps.detect-package-manager.outputs.cache-dependency-path }}
+
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
-      - name: Run tests
+
+      - name: Typecheck
+        run: ${{ steps.detect-package-manager.outputs.runner }} typecheck
+
+      - name: Unit tests
         run: ${{ steps.detect-package-manager.outputs.runner }} test
+
+      - name: Build backend
+        run: ${{ steps.detect-package-manager.outputs.runner }} build
+
       - name: Start backend API
         run: |
-          node src/server.js > "$RUNNER_TEMP/aircnc-backend.log" 2>&1 &
+          node dist/server.js > "$RUNNER_TEMP/aircnc-backend.log" 2>&1 &
           for attempt in {1..30}; do
             if curl --fail --silent http://127.0.0.1:3333/healthz; then
               exit 0
@@ -101,5 +113,17 @@ jobs:
           API_URL: http://127.0.0.1:3333
           MONGODB_URI: mongodb://127.0.0.1:27017/aircnc
           PORT: 3333
+
       - name: Run API end-to-end tests
         run: ${{ steps.detect-package-manager.outputs.runner }} test:e2e
+
+      - name: Upload Playwright results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-playwright-results
+          path: |
+            apps/backend/test-results/
+            apps/backend/playwright-report/
+          if-no-files-found: ignore
+          retention-days: 7
