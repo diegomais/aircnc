@@ -1,19 +1,19 @@
 import express from 'express';
 import multer from 'multer';
-import uploadConfig from './config/upload.js';
+import uploadConfig from './config/upload';
 
-import { SessionController } from './controllers/SessionController.js';
-import SpotController from './controllers/SpotController.js';
-import BookingController from './controllers/BookingController.js';
-import { DashboardController } from './controllers/DashboardController.js';
-import ApprovalController from './controllers/ApprovalController.js';
-import RejectionController from './controllers/RejectionController.js';
+import { SessionController } from './controllers/SessionController';
+import SpotController from './controllers/SpotController';
+import BookingController from './controllers/BookingController';
+import { DashboardController } from './controllers/DashboardController';
+import ApprovalController from './controllers/ApprovalController';
+import RejectionController from './controllers/RejectionController';
 
-import { SpotsRepository } from './repositories/SpotsRepository.js';
-import { UsersRepository } from './repositories/UsersRepository.js'
+import { SpotsRepository } from './repositories/SpotsRepository';
+import { UsersRepository } from './repositories/UsersRepository';
 
-import { SessionService } from './services/SessionService.js'
-import { SpotsService } from './services/SpotsService.js';
+import { SessionService } from './services/SessionService';
+import { SpotsService } from './services/SpotsService';
 
 const routes = express.Router();
 const upload = multer(uploadConfig);

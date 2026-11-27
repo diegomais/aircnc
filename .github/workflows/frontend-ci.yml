@@ -74,6 +74,9 @@ jobs:
         env:
           NEXT_PUBLIC_API_URL: http://127.0.0.1:3333
 
+      - name: Build backend
+        run: pnpm --filter aircnc-backend build
+
       - name: Start backend API
         run: |
           pnpm --filter aircnc-backend start > "$RUNNER_TEMP/aircnc-backend.log" 2>&1 &

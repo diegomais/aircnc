@@ -1,7 +1,8 @@
-import Booking from '../models/Booking.js';
+import type { Request, Response } from 'express';
+import Booking from '../models/Booking';
 
 export default {
-  async store(req, res) {
+  async store(req: Request, res: Response) {
     const { booking_id } = req.params;
     if (!booking_id) {
       return res
@@ -16,7 +17,9 @@ export default {
         .json({ error: 'User ID is necessary in request headers.' });
     }
 
-    const booking = await Booking.findById(booking_id).populate('spot');
+    const booking = await Booking.findById(booking_id).populate<{
+      spot: { user: string };
+    }>('spot');
     if (!booking) {
       return res
         .status(400)
@@ -26,14 +29,14 @@ export default {
     if (String(booking.spot.user) !== String(user_id)) {
       return res
         .status(400)
-        .json({ error: 'Access denied to reject this request.' });
+        .json({ error: 'Access denied to accept this request.' });
     }
 
-    booking.approved = false;
+    booking.approved = true;
 
     await booking.save();
 
-    const bookingUserSocket = req.connectedUsers[booking.user];
+    const bookingUserSocket = req.connectedUsers[String(booking.user)];
 
     if (bookingUserSocket) {
       req.io.to(bookingUserSocket).emit('booking_response', booking);

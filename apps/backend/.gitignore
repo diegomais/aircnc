@@ -1,6 +1,7 @@
-node_modules
 .env
-uploads/*
-!uploads/.gitkeep
+dist/
+node_modules
 playwright-report/
 test-results/
+uploads/*
+!uploads/.gitkeep

@@ -1,9 +1,10 @@
-import Booking from '../models/Booking.js';
-import Spot from '../models/Spot.js';
-import User from '../models/User.js';
+import type { Request, Response } from 'express';
+import Booking from '../models/Booking';
+import Spot from '../models/Spot';
+import User from '../models/User';
 
 export default {
-  async store(req, res) {
+  async store(req: Request, res: Response) {
     const { user_id } = req.headers;
     const { spot_id } = req.params;
     const { date } = req.body;
@@ -26,9 +27,14 @@ export default {
       date,
     });
 
-    await booking.populate('spot user');
+    await booking.populate<{ spot: { user: string }; user: { _id: string } }>(
+      'spot user'
+    );
 
-    const ownerSocket = req.connectedUsers[booking.spot.user];
+    const ownerSocket =
+      req.connectedUsers[
+        String((booking.spot as unknown as { user: string }).user)
+      ];
 
     if (ownerSocket) {
       req.io.to(ownerSocket).emit('booking_request', booking);

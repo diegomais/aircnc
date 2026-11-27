@@ -2,12 +2,16 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import { dirname, resolve } from 'node:path';
 import { Server } from 'socket.io';
 import { createServer } from 'node:http';
 import Sentry from '@sentry/node';
 import Tracing from '@sentry/tracing';
-import routes from './routes.js';
+import routes from './routes';
+
+const require = createRequire(import.meta.url);
+const dotenv = require('dotenv') as { config: () => void };
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -19,7 +23,6 @@ const io = new Server(httpServer, {
 });
 
 if (process.env.NODE_ENV !== 'production') {
-  const dotenv = await import('dotenv');
   dotenv.config();
 }
 
@@ -34,20 +37,17 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(process.env.MONGODB_URI ?? 'mongodb://localhost:27017/aircnc');
 
-const connectedUsers = {};
+const connectedUsers: Record<string, string> = {};
 
-io.on('connection', socket => {
+io.on('connection', (socket) => {
   // Get user_id sent by client
   const { user_id } = socket.handshake.query;
 
   // Store socket_id by user_id.
   // In production, it's recommended to use Redis to persist data when server is down.
-  connectedUsers[user_id] = socket.id;
+  if (typeof user_id === 'string') connectedUsers[user_id] = socket.id;
 });
 
 app.use((req, res, next) => {
@@ -72,15 +72,16 @@ app.get('/healthz', (_req, res) => {
     .status(databaseReady ? 200 : 503)
     .json({ status: databaseReady ? 'ok' : 'unavailable' });
 });
-app.get('/debug-sentry', (req, res) => {
+app.get('/debug-sentry', (_req, _res) => {
   throw new Error('My first Sentry error!');
 });
 app.use('/files', express.static(resolve(__dirname, '..', 'uploads')));
 app.use(routes);
 app.use(Sentry.Handlers.errorHandler());
-app.use((err, req, res, next) => {
-  res.statusCode = 500;
-  res.end(res.sentry + '\n');
-});
+app.use(((err: Error & { sentry?: string }, _req, _res, _next) => {
+  _res
+    .status(500)
+    .end((_res as express.Response & { sentry?: string }).sentry + '\n');
+}) as express.ErrorRequestHandler);
 
 export default httpServer;

@@ -1,26 +1,7 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { DashboardController } from '../../src/controllers/DashboardController.js';
-
-// Helper to create mock req/res, adapted for headers
-function createMockReqRes({ headers = {} } = {}) {
-  const req = { headers };
-  let statusCode = null;
-  let jsonResponse = null;
-  const res = {
-    status: (code) => {
-      statusCode = code;
-      return res;
-    },
-    json: (data) => {
-      jsonResponse = data;
-      return res;
-    },
-    getStatus: () => statusCode,
-    getJson: () => jsonResponse,
-  };
-  return { req, res };
-}
+import { DashboardController } from '../../src/controllers/DashboardController';
+import { createMockReqRes } from '../helpers/createMockReqRes';
 
 describe('DashboardController', () => {
   describe('show', () => {
@@ -37,16 +18,20 @@ describe('DashboardController', () => {
       await controller.show(req, res);
 
       assert.equal(res.getStatus(), 400, 'Status code should be 400');
-      assert.deepEqual(res.getJson(), { error: 'User ID is required.' }, 'Response JSON should indicate missing user_id');
+      assert.deepEqual(
+        res.getJson(),
+        { error: 'User ID is required.' },
+        'Response JSON should indicate missing user_id'
+      );
     });
 
     test('should call spotsService.listByUserId and return spots if user_id is provided', async () => {
       const mockSpots = [{ _id: 'spot1', name: 'My Spot' }];
       const userId = 'user-123';
-      let calledWithUserId = null;
+      let calledWithUserId: string | null = null;
 
       const spotsService = {
-        listByUserId: async (id) => {
+        listByUserId: async (id: string) => {
           calledWithUserId = id;
           return mockSpots;
         },
@@ -56,9 +41,21 @@ describe('DashboardController', () => {
 
       await controller.show(req, res);
 
-      assert.equal(calledWithUserId, userId, 'spotsService.listByUserId should be called with the correct user_id');
-      assert.deepEqual(res.getJson(), mockSpots, 'Response JSON should be the spots array');
-      assert.equal(res.getStatus(), null, 'Status code should be 200 (default, not explicitly set)');
+      assert.equal(
+        calledWithUserId,
+        userId,
+        'spotsService.listByUserId should be called with the correct user_id'
+      );
+      assert.deepEqual(
+        res.getJson(),
+        mockSpots,
+        'Response JSON should be the spots array'
+      );
+      assert.equal(
+        res.getStatus(),
+        null,
+        'Status code should be 200 (default, not explicitly set)'
+      );
     });
 
     test('should return an empty array if spotsService.listByUserId returns an empty array', async () => {
@@ -68,17 +65,29 @@ describe('DashboardController', () => {
       const { req, res } = createMockReqRes({ headers: { user_id: userId } });
 
       await controller.show(req, res);
-      assert.deepEqual(res.getJson(), [], 'Response JSON should be an empty array');
+      assert.deepEqual(
+        res.getJson(),
+        [],
+        'Response JSON should be an empty array'
+      );
     });
 
     test('should handle errors thrown by spotsService.listByUserId', async () => {
       const userId = 'user-789';
       const serviceError = new Error('Service unavailable');
-      const spotsService = { listByUserId: async () => { throw serviceError; } };
+      const spotsService = {
+        listByUserId: async () => {
+          throw serviceError;
+        },
+      };
       const controller = new DashboardController({ spotsService });
       const { req, res } = createMockReqRes({ headers: { user_id: userId } });
 
-      await assert.rejects(async () => controller.show(req, res), serviceError, 'Should reject with the error from the service');
+      await assert.rejects(
+        async () => controller.show(req, res),
+        serviceError,
+        'Should reject with the error from the service'
+      );
     });
   });
 });
